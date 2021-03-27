@@ -3,8 +3,9 @@ import datetime
 from werkzeug.security import check_password_hash
 from pymodm import connect, fields, MongoModel, EmbeddedMongoModel
 from pymongo.operations import IndexModel
+from config import Config
 
-connect('mongodb://localhost:27017/novaLinksDB')
+connect(Config.MONGODB_URI)
 
 
 # 用户
@@ -44,3 +45,9 @@ class UserLog(MongoModel):
 
     def __repr__(self):
         return "<Userlog %r>" % self.user.name
+
+
+# 订单
+class Order(MongoModel):
+    def __repr__(self):
+        return "<Userlog %r>" % self._id

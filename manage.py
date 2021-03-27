@@ -4,7 +4,7 @@
 from flask_script import Manager
 from main import app, scheduler
 from flask_script import Shell
-from main.models import User, UserLog
+from main.models import User, UserLog, Order
 from getpass import getpass
 from werkzeug.security import generate_password_hash
 
@@ -14,7 +14,7 @@ manager = Manager(app)
 
 
 def make_shell_context():
-    return dict(app=app, User=User, UserLog=UserLog, scheduler=scheduler)
+    return dict(app=app, User=User, UserLog=UserLog, Order=Order, scheduler=scheduler)
 
 
 manager.add_command('shell', Shell(make_context=make_shell_context))
