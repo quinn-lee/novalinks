@@ -9,6 +9,8 @@ from main.utils.commons import ReConverter
 from flask_apscheduler import APScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask_httpauth import HTTPTokenAuth
+import os
+import asyncio
 
 
 auth = HTTPTokenAuth(scheme='Token')
@@ -25,6 +27,36 @@ formatter = logging.Formatter('%(asctime)s %(levelname)s %(filename)s:%(lineno)d
 file_log_handler.setFormatter(formatter)
 # 为全局日志工具对象添加日志记录器
 logging.getLogger().addHandler(file_log_handler)
+
+
+def orders_query():
+    """订单数据获取定时任务"""
+    with app.app_context():
+        if os.path.exists('shutdown.txt'):
+            return
+        from main.utils.orders import obtain_orders
+
+        async def process_order(user):
+            try:
+                obtain_orders(user)
+                return "process_order success"
+            except Exception as error:
+                return "process_order error-{}".format(error)
+
+        new_loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(new_loop)
+        loop = asyncio.get_event_loop()
+        try:
+            from main.models import User
+            tasks = [asyncio.ensure_future(process_order(user)) for user in User.objects.all()]
+            print(len(tasks))
+
+            loop.run_until_complete(asyncio.wait(tasks))
+
+            for task in tasks:
+                print('Task orders_query ret: ', task.result())
+        except Exception as e:
+            print("orders_query error-{}".format(e))
 
 
 # 工厂方法
