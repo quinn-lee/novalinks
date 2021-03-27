@@ -31,26 +31,6 @@
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item dropdown mr-1" id="messageShow">
-          </li>
-          <script id="messageTemplate" type="text/x-jsrender">
-            <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-toggle="dropdown">
-              <i class="mdi mdi-message-text mx-0"></i>
-              <span class="count"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="messageDropdown">
-              <p class="mb-0 font-weight-normal float-left dropdown-header">消息提示</p>
-              <a class="dropdown-item">
-                <div class="item-content flex-grow">
-                  <h6 class="ellipsis font-weight-normal">{{>mtitle}}
-                  </h6>
-                  <p class="font-weight-light small-text text-muted mb-0">
-                    {{>mcontent}}
-                  </p>
-                </div>
-              </a>         
-            </div>
-          </script>
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
               <span class="nav-profile-name" id="login-name"></span>
@@ -142,11 +122,11 @@
                       </tbody>
                       <script id="trTemplate" type="text/x-jsrender">
                         <tr>
-                          <td><a href="/orgdetails.html?org_code={{>org_code}}&start_date={{>start_date}}&end_date={{>end_date}}&org_name={{>org_name}}">{{>org_code}}</a></td>
-                          <td>{{>org_name}}</td>
-                          <td>{{>send_class}}</td>
-                          <td><label class="badge">{{>msg_status}}</label></td>
-                          <td>{{>count}}</td>
+                          <td><a href="/orgdetails.html?start_date={{>start_date}}&end_date={{>end_date}}">{{>item_category_num}}</a></td>
+                          <td>{{>sum_item_num}}</td>
+                          <td>{{>sum_order_amount}}</td>
+                          <td>{{>avg_item_num_per_order}}</td>
+                          <td>{{>avg_order_amount}}</td>
                         </tr>
                       </script>
                     </table>
@@ -189,7 +169,6 @@
   <script src="/static/js/dataTables.bootstrap4.js"></script>
   <script src="/static/js/main/orders.js"></script>
   <script src="/static/js/main/session.js"></script>
-  <script src="/static/js/main/messageshow.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
   <!-- End custom js for this page-->

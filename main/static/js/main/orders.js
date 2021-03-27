@@ -3,6 +3,45 @@ function getCookie(name) {
     return r ? r[1] : undefined;
 }
 
+// 页面初始化
+function init_page() {
+    $("#start_date").val("2020/01/01")
+	$("#end_date").val("2021/01/01")
+	var data = {
+        start_date: $("#start_date").val(),
+        end_date: $("#end_date").val(),
+        action: 'search'
+    };
+    // 将data转为json字符串
+    var jsonData = JSON.stringify(data);
+    $.ajax({
+        url:"/api/v1.0/orders/statistics",
+        type:"post",
+        data: jsonData,
+        contentType: "application/json",
+        dataType: "json",
+        headers:{
+            "X-CSRFToken":getCookie("csrf_token")
+        },
+        success: function (resp) {
+            if (resp.errno == "0") {
+                var res = resp.data;
+                $( "#table-tr" ).html(
+                    $( "#trTemplate" ).render( res )
+                );
+                if (typeof(resultTable) == "undefined") {
+                    resultTable = $('#result-listing').DataTable({
+                        searching: false, paging: false, info: false
+                    });
+                }
+            }
+            else {
+                alert(resp.errmsg);
+            }
+        }
+    });
+}
+
 $(document).ready(function() {
 
 	$.datetimepicker.setLocale('ch');
@@ -23,6 +62,10 @@ $(document).ready(function() {
          format:'Y/m/d'
     });
 
+    // 页面初始化
+    init_page();
+
+    // 搜索提交事件
 	$("#search-form").submit(function(e){
 		e.preventDefault();
         if(!$("#start_date").val() || !$("#end_date").val()){
@@ -47,7 +90,7 @@ $(document).ready(function() {
         // 将data转为json字符串
         var jsonData = JSON.stringify(data);
 		$.ajax({
-            url:"/api/v1.0/orders_statistics",
+            url:"/api/v1.0/orders/statistics",
             type:"post",
             data: jsonData,
             contentType: "application/json",
