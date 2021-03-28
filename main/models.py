@@ -40,7 +40,7 @@ class User(MongoModel):
         return check_password_hash(self.pwd, passwd)
 
     def credentials(self):
-        dict(
+        return dict(
             refresh_token=self.refresh_token,
             lwa_app_id=self.lwa_app_id,
             lwa_client_secret=self.lwa_client_secret,
@@ -100,6 +100,7 @@ class Order(MongoModel):
     IsEstimatedShipDateSet = fields.BooleanField()
     AssignedShipFromLocationAddress = fields.DictField()
     FulfillmentInstruction = fields.DictField()
+    has_items = fields.BooleanField(default=False)
 
     def __repr__(self):
         return "<Order %r>" % self.AmazonOrderId

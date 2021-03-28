@@ -7,7 +7,7 @@ from flask_script import Shell
 from main.models import User, UserLog, Order, OrderItem
 from getpass import getpass
 from werkzeug.security import generate_password_hash
-from main.utils.orders import obtain_orders
+from main.utils.orders import obtain_orders, obtain_order_items
 
 
 # 初始化管理器
@@ -16,7 +16,7 @@ manager = Manager(app)
 
 def make_shell_context():
     return dict(app=app, User=User, UserLog=UserLog, Order=Order, OrderItem=OrderItem, scheduler=scheduler,
-                obtain_orders=obtain_orders)
+                obtain_orders=obtain_orders, obtain_order_items=obtain_order_items)
 
 
 manager.add_command('shell', Shell(make_context=make_shell_context))
@@ -30,6 +30,23 @@ def adduser():
     new = User(name=name, email=email, pwd=generate_password_hash(input_password))
     new.save()
     print("new user <%s> created" % name)
+
+
+@manager.command
+def process_orders():
+    days = int(input('Days> '))
+    for user in User.objects.all():
+        obtain_orders(user, days=days)
+
+
+@manager.command
+def process_order_items():
+    i = 0
+    for order in Order.objects.raw({'has_items': False}).all():
+        obtain_order_items(order)
+        if i > 50:  # 时间太长时会报CursorNotFound
+            break
+        i += 1
 
 
 if __name__ == "__main__":
