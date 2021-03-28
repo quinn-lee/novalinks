@@ -81,3 +81,13 @@ def logout():
     session.clear()
     session["csrf_token"] = csrf_token
     return jsonify(errno=RET.OK, errmsg="OK")
+
+
+@api.route("/users", methods=["GET"])
+def users():
+    """获取用户数据"""
+    all_users = User.objects.all()
+    data = [{'email': user.email, 'name': user.name} for user in all_users]
+    data.insert(0, {'email': '', 'name': ''})
+    current_app.logger.info(data)
+    return jsonify(errno='0', data=data)

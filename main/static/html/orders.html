@@ -71,7 +71,7 @@
                   <form class="form-sample" id='search-form'>
                     <div class="alert alert-danger" role="alert" id="notice" style="display: none;"></div>
                     <div class="row">
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <div class="form-group row">
                           <label class="col-sm-3 col-form-label">时间从：</label>
                           <div class="col-sm-9">
@@ -79,7 +79,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <div class="form-group row">
                           <label class="col-sm-3 col-form-label">到：</label>
                           <div class="col-sm-9">
@@ -87,7 +87,21 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-4">
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">店铺：</label>
+                          <div class="col-sm-9">
+                            <select class="form-control" id="email" name='email'>
+                            </select>
+                            <script id="userTemplate" type="text/x-jsrender">
+                              <option value={{>email}}>{{>name}}</option>
+                            </script>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
                         <div class="form-group row">
                           <button type="submit" class="btn btn-primary mr-2">搜索</button>
                         </div>
@@ -111,6 +125,7 @@
                     <table class="table table-striped" id="result-listing">
                       <thead>
                         <tr>
+                          <th>店铺</th>
                           <th>订单商品种类数</th>
                           <th>已订购商品数量</th>
                           <th>已订购商品销售额</th>
@@ -122,7 +137,8 @@
                       </tbody>
                       <script id="trTemplate" type="text/x-jsrender">
                         <tr>
-                          <td><a href="/orgdetails.html?start_date={{>start_date}}&end_date={{>end_date}}">{{>item_category_num}}</a></td>
+                          <td><a href="/orderdetails.html?start_date={{>start_date}}&end_date={{>end_date}}&email={{>email}}">{{>user_name}}</a></td>
+                          <td>{{>item_category_num}}</td>
                           <td>{{>sum_item_num}}</td>
                           <td>{{>sum_order_amount}}</td>
                           <td>{{>avg_item_num_per_order}}</td>

@@ -106,7 +106,16 @@ class Order(MongoModel):
         return "<Order %r>" % self.AmazonOrderId
 
     def order_items(self):
-        OrderItem.objects.raw({'order': self._id})
+        return [item for item in OrderItem.objects.raw({'order': self._id})]
+
+    def asins(self):
+        return [item.ASIN for item in self.order_items()]
+
+    def item_num(self):
+        return sum([item.QuantityOrdered for item in self.order_items()])
+
+    def order_amount(self):
+        return sum([float(item.ItemPrice['Amount']) for item in self.order_items()])
 
 
 # 订单商品
@@ -145,4 +154,4 @@ class OrderItem(MongoModel):
     DeemedResellerCategory = fields.CharField()
 
     def __repr__(self):
-        return "<Order %r>" % self.order.AmazonOrderId
+        return "<Item %r>" % self.order.AmazonOrderId
