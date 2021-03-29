@@ -1,3 +1,5 @@
+# coding:utf-8
+
 from . import api
 from flask import jsonify, request, current_app
 from main.utils.response_code import RET
