@@ -54,7 +54,7 @@ def details():
                                 'PurchaseDate': {'$lte': datetime.strptime(request.args.get('end_date'), '%Y/%m/%d')}})
     data = [{'AmazonOrderId': order.AmazonOrderId,
              'PurchaseDate': order.PurchaseDate.strftime('%Y-%m-%d'),
-             'order_amount': "%s EUR" % order.order_amount(),
+             'order_amount': "%s EUR" % round(order.order_amount(), 2),
              'item_category_num': len(order.order_items()),
              'item_num': order.item_num()} for order in orders]
     return jsonify(errno="0", data=data)
