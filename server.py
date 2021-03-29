@@ -1,3 +1,5 @@
+# coding:utf-8
+
 import sys
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
