@@ -30,7 +30,7 @@ def login():
         return jsonify(errno=RET.PARAMERR, errmsg="参数不完整")
 
     # 邮箱的格式
-    if not re.match(r'^([\w]+\.*)([\w]+)\@[\w]+\.\w{3}(\.\w{2}|)$', email):
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
         return jsonify(errno=RET.PARAMERR, errmsg="邮箱格式错误")
 
     user_ip = request.remote_addr  # 用户的ip地址
