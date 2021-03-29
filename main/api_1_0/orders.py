@@ -25,8 +25,9 @@ def statistics():
     data = []
     for user in users:
         orders = Order.objects.raw({'user': user._id,
-                           'PurchaseDate': {'$gte': datetime.strptime(req_dict.get('start_date'), '%Y/%m/%d')},
-                           'PurchaseDate': {'$lte': datetime.strptime(req_dict.get('end_date'), '%Y/%m/%d')}})
+                           'PurchaseDate': {'$gte': datetime.strptime(req_dict.get('start_date'), '%Y/%m/%d'),
+                                            '$lte': datetime.strptime(req_dict.get('end_date'), '%Y/%m/%d')}})
+        current_app.logger.info("orders count: {}".format(orders.count()))
         if orders.count() > 0:
             asins = []
             for order in orders:
@@ -52,8 +53,8 @@ def details():
     """
     user = User.objects.raw({'email': request.args.get('email')}).first()
     orders = Order.objects.raw({'user': user._id,
-                                'PurchaseDate': {'$gte': datetime.strptime(request.args.get('start_date'), '%Y/%m/%d')},
-                                'PurchaseDate': {'$lte': datetime.strptime(request.args.get('end_date'), '%Y/%m/%d')}})
+                                'PurchaseDate': {'$gte': datetime.strptime(request.args.get('start_date'), '%Y/%m/%d'),
+                                                 '$lte': datetime.strptime(request.args.get('end_date'), '%Y/%m/%d')}})
     data = [{'AmazonOrderId': order.AmazonOrderId,
              'PurchaseDate': order.PurchaseDate.strftime('%Y-%m-%d'),
              'order_amount': "%s EUR" % round(order.order_amount(), 2),
