@@ -115,7 +115,7 @@ class Order(MongoModel):
         return sum([item.QuantityOrdered for item in self.order_items()])
 
     def order_amount(self):
-        return sum([float(item.ItemPrice.get('Amount', 0)) for item in self.order_items()])
+        return float(self.OrderTotal.get('Amount', 0))
 
 
 # 订单商品
