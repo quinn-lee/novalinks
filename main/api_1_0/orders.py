@@ -57,4 +57,4 @@ def details():
              'order_amount': "%s EUR" % round(order.order_amount(), 2),
              'item_category_num': len(order.order_items()),
              'item_num': order.item_num()} for order in orders]
-    return jsonify(errno="0", data=data)
+    return jsonify(errno="0", data=data, totalRows=orders.count())
