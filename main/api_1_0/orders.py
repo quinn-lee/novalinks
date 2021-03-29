@@ -41,3 +41,20 @@ def statistics():
                          'start_date': req_dict.get('start_date'), 'end_date': req_dict.get('end_date'),
                          'email': user.email, 'user_name': user.name})
     return jsonify(errno="0", data=data)
+
+
+@api.route("/order/details", methods=["GET"])
+def details():
+    """订单详情
+    参数： 起始日期，终止日期，用户邮箱
+    """
+    user = User.objects.raw({'email': request.args.get('email')}).first()
+    orders = Order.objects.raw({'user': user._id,
+                                'PurchaseDate': {'$gte': datetime.strptime(request.args.get('start_date'), '%Y/%m/%d')},
+                                'PurchaseDate': {'$lte': datetime.strptime(request.args.get('end_date'), '%Y/%m/%d')}})
+    data = [{'AmazonOrderId': order.AmazonOrderId,
+             'PurchaseDate': order.PurchaseDate.strftime('%Y-%m-%d'),
+             'order_amount': "%s EUR" % order.order_amount(),
+             'item_category_num': len(order.order_items()),
+             'item_num': order.item_num()} for order in orders]
+    return jsonify(errno="0", data=data)
