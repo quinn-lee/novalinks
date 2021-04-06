@@ -19,7 +19,7 @@ try:
 except socket.error:
     print("!!!scheduler already started, DO NOTHING")
 else:
-    #scheduler.start()
+    scheduler.start()
     print("scheduler started")
 
 http_server = HTTPServer(WSGIContainer(app))

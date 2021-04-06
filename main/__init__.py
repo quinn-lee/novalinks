@@ -38,7 +38,7 @@ def orders_query():
 
         async def process_order(user):
             try:
-                obtain_orders(user)
+                obtain_orders(user, days=2)
                 return "process_order success"
             except Exception as error:
                 return "process_order error-{}".format(error)
@@ -59,6 +59,10 @@ def orders_query():
             print("orders_query error-{}".format(e))
 
 
+def order_items_query():
+    pass
+
+
 # 工厂方法
 def create_app(environment):
     """
@@ -73,7 +77,12 @@ def create_app(environment):
     app.config.update(
         {
             'JOBS': [
-
+                {
+                    'id': 'orders_query',
+                    'func': orders_query,
+                    "trigger": "interval",
+                    "days": 1
+                }
             ],
             'SCHEDULER_TIMEZONE': 'Asia/Shanghai',
             'SCHEDULER_API_ENABLED': True,
