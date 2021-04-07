@@ -35,8 +35,15 @@ def obtain_inventories(user):
                 if i == 1:
                     line = f.readline()
                     continue
-                Inventory(user=user, sku=line.split()[0], asin=line.split()[1], price=float(line.split()[2]),
-                          quantity=int(line.split()[3])).save()
+                inventory = Inventory.objects.raw({"asin": line.split()[1]}).first()
+                if inventory is None:
+                    Inventory(user=user, sku=line.split()[0], asin=line.split()[1], price=float(line.split()[2]),
+                              quantity=int(line.split()[3])).save()
+                else:
+                    inventory.sku = line.split()[0]
+                    inventory.price = float(line.split()[2])
+                    inventory.quantity = int(line.split()[3])
+                    inventory.save()
                 line = f.readline()
     except SellingApiException as ex:
         print(ex)

@@ -113,7 +113,7 @@ $(document).ready(function() {
                 {'data': 'SmallImageURL',
                  "render": function (data, type, row, meta) {
                         if(data != null){
-                            return '<img src="' + data + '" alt="' + data + '"height="16" width="16"/>';
+                            return '<img src="' + data + '" alt="' + data + '"height="20" width="20"/>';
                         }
                     }
                 },
