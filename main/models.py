@@ -155,3 +155,38 @@ class OrderItem(MongoModel):
 
     def __repr__(self):
         return "<Item %r>" % self.order.AmazonOrderId
+
+
+class Inventory(MongoModel):
+    user = fields.ReferenceField(User)  # 所属用户
+    sku = fields.CharField()
+    asin = fields.CharField()
+    price = fields.FloatField()
+    quantity = fields.IntegerField()
+    has_attrs = fields.BooleanField(default=False)
+    AttributeSets = fields.ListField()
+    Identifiers = fields.DictField()
+    Relationships = fields.ListField()
+    SalesRankings = fields.ListField()
+
+    def __repr__(self):
+        return "<Catalog %r>" % self.sku
+
+    def attrset(self):
+        if self.AttributeSets is not None and self.AttributeSets != []:
+            return self.AttributeSets[0]
+        else:
+            return {}
+
+    def to_json(self):
+        return {
+            "sku": self.sku,
+            "asin": self.asin,
+            "price": self.price,
+            "quantity": self.quantity,
+            "Brand": self.attrset().get("Brand"),
+            "Color": self.attrset().get("Color"),
+            "Size": self.attrset().get("Size"),
+            "Title": self.attrset().get("Title"),
+            "SmallImageURL": self.attrset().get("SmallImage").get("URL") if self.attrset().get("SmallImage") is not None else ""
+        }
