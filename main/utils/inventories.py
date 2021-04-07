@@ -48,7 +48,7 @@ def obtain_catalogs(inventory):
         res = Catalog(marketplace=Marketplaces.DE, credentials=inventory.user.credentials()).\
             get_item(MarketplaceId='A1PA6795UKMFR9', asin=inventory.asin)
 
-        if res.payload.get('Identifiers') is not None:
+        if res.payload.get('Identifiers') is not None and res.payload.get('Identifiers') != {}:
             inventory.Identifiers = res.payload.get('Identifiers')
         if res.payload.get('AttributeSets') is not None and res.payload.get('AttributeSets') != []:
             inventory.AttributeSets = res.payload.get('AttributeSets')
