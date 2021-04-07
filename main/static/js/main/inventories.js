@@ -123,9 +123,19 @@ $(document).ready(function() {
                 },
                 {'data': 'price'
                 },
-                {'data': 'Brand'
+                {'data': 'Brand',
+                    render: function (data, type, full) {
+                        if(data != null){
+                            return "<a data-toggle='tooltip' title='" + data + "'> "+ data.substr(0,10) + "</a>";
+                        }
+                    }
                 },
-                {'data': 'Color'
+                {'data': 'Color',
+                    render: function (data, type, full) {
+                        if(data != null){
+                            return "<a data-toggle='tooltip' title='" + data + "'> "+ data.substr(0,10) + "</a>";
+                        }
+                    }
                 },
                 {'data': 'Size',
                     render: function (data, type, full) {
