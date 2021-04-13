@@ -100,6 +100,7 @@ class Order(MongoModel):
     IsEstimatedShipDateSet = fields.BooleanField()
     AssignedShipFromLocationAddress = fields.DictField()
     FulfillmentInstruction = fields.DictField()
+    ShippingAddress = fields.DictField()
     has_items = fields.BooleanField(default=False)
 
     def __repr__(self):
@@ -116,6 +117,20 @@ class Order(MongoModel):
 
     def order_amount(self):
         return float(self.OrderTotal.get('Amount', 0))
+
+    def to_json(self):
+        return {
+            'AmazonOrderId': self.AmazonOrderId,
+            'OrderStatus': self.OrderStatus,
+            'OrderTotal': "%s%s" % (self.OrderTotal.get('CurrencyCode', ''), self.OrderTotal.get('Amount', 0)),
+            'ShippingAddress': self.ShippingAddress,
+            'NumberOfItemsShipped': self.NumberOfItemsShipped,
+            'NumberOfItemsUnshipped': self.NumberOfItemsUnshipped,
+            'PurchaseDate': self.PurchaseDate.strftime('%Y-%m-%d'),
+            'item_num': self.item_num(),
+            'items': [{'ASIN': item.ASIN, 'sku': item.sku(), 'QuantityOrdered': item.QuantityOrdered,
+                       'QuantityShipped': item.QuantityShipped} for item in OrderItem.objects.raw({'order': self._id})]
+        }
 
 
 # 订单商品
@@ -155,6 +170,11 @@ class OrderItem(MongoModel):
 
     def __repr__(self):
         return "<Item %r>" % self.order.AmazonOrderId
+
+    def sku(self):
+        if Inventory.objects.raw({'asin': self.ASIN}).count() > 0:
+            inventory = Inventory.objects.raw({'asin': self.ASIN}).first()
+            return inventory.sku
 
 
 class Inventory(MongoModel):

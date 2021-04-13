@@ -38,7 +38,7 @@ def orders_query():
 
         async def process_order(user):
             try:
-                obtain_orders(user, days=2)
+                obtain_orders(user, days=20)
                 return "process_order success"
             except Exception as error:
                 return "process_order error-{}".format(error)

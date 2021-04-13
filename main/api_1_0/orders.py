@@ -61,3 +61,21 @@ def details():
              'item_category_num': len(order.order_items()),
              'item_num': order.item_num()} for order in orders]
     return jsonify(errno="0", data=data, totalRows=orders.count())
+
+
+@api.route("/order/unshipped", methods=["GET"])
+def unshipped():
+    """未发货订单
+    参数： 起始日期，终止日期，用户邮箱
+    """
+    if request.args.get('email') is not None:
+        user = User.objects.raw({'email': request.args.get('email')}).first()
+    else:
+        user = User.objects.first()
+    orders = Order.objects.raw({'user': user._id, 'OrderStatus': {'$in': ['PartiallyShipped', 'Unshipped']}})
+    if request.args.get('start_date') is not None:
+        orders = orders.raw({'PurchaseDate': {'$gte': datetime.strptime(request.args.get('start_date'), '%Y/%m/%d')}})
+    if request.args.get('end_date') is not None:
+        orders = orders.raw({'PurchaseDate': {'lte': datetime.strptime(request.args.get('end_date'), '%Y/%m/%d')}})
+    data = [order.to_json() for order in orders]
+    return jsonify(errno="0", data=data, totalRows=orders.count())

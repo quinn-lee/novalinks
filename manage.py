@@ -7,7 +7,7 @@ from flask_script import Shell
 from main.models import User, UserLog, Order, OrderItem, Inventory
 from getpass import getpass
 from werkzeug.security import generate_password_hash
-from main.utils.orders import obtain_orders, obtain_order_items
+from main.utils.orders import obtain_orders, obtain_order_items, obtain_order_address
 from main.utils.inventories import obtain_inventories, obtain_catalogs
 
 
@@ -45,6 +45,16 @@ def process_order_items():
     i = 0
     for order in Order.objects.raw({'has_items': False}).all():
         obtain_order_items(order)
+        if i > 50:  # 时间太长时会报CursorNotFound
+            break
+        i += 1
+
+
+@manager.command
+def process_order_address():
+    i = 0
+    for order in Order.objects.raw({'ShippingAddress': None}).all():
+        obtain_order_address(order)
         if i > 50:  # 时间太长时会报CursorNotFound
             break
         i += 1
