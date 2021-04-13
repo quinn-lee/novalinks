@@ -70,11 +70,11 @@ def obtain_order_items(order):
         res = Orders(marketplace=Marketplaces.DE, credentials=order.user.credentials()).get_order_items(
             order_id=order.AmazonOrderId)
         for item in res.payload['OrderItems']:
-            if OrderItem.objects.raw({'OrderItemId': order['OrderItemId'], 'order': order._id}).count() == 0:
+            if OrderItem.objects.raw({'OrderItemId': item['OrderItemId'], 'order': order._id}).count() == 0:
                 OrderItem(order=order, **item).save()
             else:
-                OrderItem.objects.raw({'OrderItemId': order['OrderItemId'], 'order': order._id}).update({'$set': item})
-                order_item = OrderItem.objects.raw({'OrderItemId': order['OrderItemId'], 'order': order._id}).first()
+                OrderItem.objects.raw({'OrderItemId': item['OrderItemId'], 'order': order._id}).update({'$set': item})
+                order_item = OrderItem.objects.raw({'OrderItemId': item['OrderItemId'], 'order': order._id}).first()
                 if item.get('ScheduledDeliveryStartDate') is not None:
                     order_item.ScheduledDeliveryStartDate = item.get('ScheduledDeliveryStartDate')
                 if item.get('ScheduledDeliveryEndDate') is not None:
@@ -85,13 +85,13 @@ def obtain_order_items(order):
             res = Orders(marketplace=Marketplaces.DE, credentials=order.user.credentials()).get_order_items(
                 NextToken=res.next_token)
             for item in res.payload['OrderItems']:
-                if OrderItem.objects.raw({'OrderItemId': order['OrderItemId'], 'order': order._id}).count() == 0:
+                if OrderItem.objects.raw({'OrderItemId': item['OrderItemId'], 'order': order._id}).count() == 0:
                     OrderItem(order=order, **item).save()
                 else:
-                    OrderItem.objects.raw({'OrderItemId': order['OrderItemId'], 'order': order._id}).update(
+                    OrderItem.objects.raw({'OrderItemId': item['OrderItemId'], 'order': order._id}).update(
                         {'$set': item})
                     order_item = OrderItem.objects.raw(
-                        {'OrderItemId': order['OrderItemId'], 'order': order._id}).first()
+                        {'OrderItemId': item['OrderItemId'], 'order': order._id}).first()
                     if item.get('ScheduledDeliveryStartDate') is not None:
                         order_item.ScheduledDeliveryStartDate = item.get('ScheduledDeliveryStartDate')
                     if item.get('ScheduledDeliveryEndDate') is not None:
