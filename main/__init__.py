@@ -81,7 +81,7 @@ def create_app(environment):
                     'id': 'orders_query',
                     'func': orders_query,
                     "trigger": "interval",
-                    "days": 1
+                    "days": 100
                 }
             ],
             'SCHEDULER_TIMEZONE': 'Asia/Shanghai',
