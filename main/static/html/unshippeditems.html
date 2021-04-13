@@ -79,62 +79,24 @@
       <div class="main-panel">
         <div class="content-wrapper">
           <div class="row">
-            <div class="col-lg-12 stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-md-4">
-                      <div class="row">
-                        <label class="col-sm-3 col-form-label">时间从：</label>
-                        <div class="col-sm-9">
-                          <input type="text" class="form-control" name="start_date" id="start_date" readonly="readonly" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="row">
-                        <label class="col-sm-3 col-form-label">到：</label>
-                        <div class="col-sm-9">
-                          <input type="text" class="form-control" name="end_date" id="end_date" readonly="readonly" />
-                        </div>
-                      </div>
-                    </div>
-                    <input type="hidden" class="form-control" name="email" id="email" readonly="readonly" />
-                    <div class="col-md-4">
-                      <div class="row">
-                        <label class="col-sm-3 col-form-label">店铺：</label>
-                        <div class="col-sm-9">
-                          <input type="text" class="form-control" name="name" id="user_name" readonly="readonly" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
 
             <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-2">
-                      <strong>店铺订单记录</strong>
-                    </div>
-                    <div class="col-md-2">
-                      <a class="btn btn-outline-secondary btn-icon-text" href="/orders.html">
-                        <i class="mdi mdi-reload btn-icon-prepend"></i>返回
-                      </a>
+                      <strong>未发货订单商品</strong>
                     </div>
                   </div>
                   <div class="table-responsive">
                     <table class="table table-striped" id="table_details">
                       <thead>
                         <tr>
-                          <th>亚马逊订单Id</th>
-                          <th>购买日期</th>
-                          <th>订单金额</th>
-                          <th>商品种类数</th>
-                          <th>商品数量</th>
+                          <th>AmazonOrderId</th>
+                          <th>ASIN</th>
+                          <th>SKU</th>
+                          <th>总订单量</th>
+                          <th>该商品未发货数</th>
                         </tr>
                       </thead>
                       <tbody id='table-tr'>
@@ -177,7 +139,7 @@
   <script src="/static/js/data-table.js"></script>
   <script src="/static/js/jquery.dataTables.js"></script>
   <script src="/static/js/dataTables.bootstrap4.js"></script>
-  <script src="/static/js/main/orderdetails.js"></script>
+  <script src="/static/js/main/unshippeditems.js"></script>
   <script src="/static/js/main/session.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->

@@ -123,13 +123,19 @@ class Order(MongoModel):
             'AmazonOrderId': self.AmazonOrderId,
             'OrderStatus': self.OrderStatus,
             'OrderTotal': "%s%s" % (self.OrderTotal.get('CurrencyCode', ''), self.OrderTotal.get('Amount', 0)),
-            'ShippingAddress': self.ShippingAddress,
+            'ShippingAddress': "%s %s %s %s %s %s %s %s %s %s " % (self.ShippingAddress.get('CountryCode', ''),
+                                                                   self.ShippingAddress.get('City', ''),
+                                                                   self.ShippingAddress.get('County', ''),
+                                                                   self.ShippingAddress.get('District', ''),
+                                                                   self.ShippingAddress.get('AddressLine1', ''),
+                                                                   self.ShippingAddress.get('AddressLine2', ''),
+                                                                   self.ShippingAddress.get('AddressLine3', ''),
+                                                                   self.ShippingAddress.get('PostalCode', ''),
+                                                                   self.ShippingAddress.get('Phone', ''),
+                                                                   self.ShippingAddress.get('Name', '')),
             'NumberOfItemsShipped': self.NumberOfItemsShipped,
             'NumberOfItemsUnshipped': self.NumberOfItemsUnshipped,
-            'PurchaseDate': self.PurchaseDate.strftime('%Y-%m-%d'),
-            'item_num': self.item_num(),
-            'items': [{'ASIN': item.ASIN, 'sku': item.sku(), 'QuantityOrdered': item.QuantityOrdered,
-                       'QuantityShipped': item.QuantityShipped} for item in OrderItem.objects.raw({'order': self._id})]
+            'PurchaseDate': self.PurchaseDate.strftime('%Y-%m-%d')
         }
 
 
@@ -175,6 +181,15 @@ class OrderItem(MongoModel):
         if Inventory.objects.raw({'asin': self.ASIN}).count() > 0:
             inventory = Inventory.objects.raw({'asin': self.ASIN}).first()
             return inventory.sku
+
+    def to_json(self):
+        return {
+            'AmazonOrderId': self.order.AmazonOrderId,
+            'ASIN': self.ASIN,
+            'sku': self.sku(),
+            'QuantityOrdered': self.QuantityOrdered,
+            'QuantityUnShipped': int(self.QuantityOrdered) - int(self.QuantityShipped)
+        }
 
 
 class Inventory(MongoModel):

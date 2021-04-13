@@ -73,9 +73,21 @@ def unshipped():
     else:
         user = User.objects.first()
     orders = Order.objects.raw({'user': user._id, 'OrderStatus': {'$in': ['PartiallyShipped', 'Unshipped']}})
-    if request.args.get('start_date') is not None:
+    if request.args.get('start_date') is not None and request.args.get('start_date') != '':
         orders = orders.raw({'PurchaseDate': {'$gte': datetime.strptime(request.args.get('start_date'), '%Y/%m/%d')}})
-    if request.args.get('end_date') is not None:
+    if request.args.get('end_date') is not None and request.args.get('end_date') != '':
         orders = orders.raw({'PurchaseDate': {'lte': datetime.strptime(request.args.get('end_date'), '%Y/%m/%d')}})
     data = [order.to_json() for order in orders]
     return jsonify(errno="0", data=data, totalRows=orders.count())
+
+
+@api.route("/order/unshippeditems", methods=["GET"])
+def unshippeditems():
+    """未发货订单商品
+    参数： AmazonOrderId
+    """
+    current_app.logger.info(request.args.get('AmazonOrderId'))
+    order = Order.objects.raw({'AmazonOrderId': request.args.get('AmazonOrderId')}).first()
+    order_items = OrderItem.objects.raw({'order': order._id})
+    data = [order_item.to_json() for order_item in order_items]
+    return jsonify(errno="0", data=data, totalRows=order_items.count())
