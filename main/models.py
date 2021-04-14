@@ -213,6 +213,37 @@ class Inventory(MongoModel):
         else:
             return {}
 
+    def item_dimensions(self):
+        return self.attrset().get('ItemDimensions', {})
+
+    def height(self):
+        h = self.item_dimensions().get("Height", None)
+        if h is not None:
+            return str(round(h.get("value", 0), 2)) + h.get("Units", "")
+        else:
+            return ""
+
+    def width(self):
+        w = self.item_dimensions().get("Width", None)
+        if w is not None:
+            return str(round(w.get("value", 0), 2)) + w.get("Units", "")
+        else:
+            return ""
+
+    def length(self):
+        le = self.item_dimensions().get("Length", None)
+        if le is not None:
+            return str(round(le.get("value", 0), 2)) + le.get("Units", "")
+        else:
+            return ""
+
+    def weight(self):
+        w = self.item_dimensions().get("Weight", None)
+        if w is not None:
+            return str(round(w.get("value", 0), 2)) + w.get("Units", "")
+        else:
+            return ""
+
     def to_json(self):
         return {
             "sku": self.sku,
@@ -223,5 +254,10 @@ class Inventory(MongoModel):
             "Color": self.attrset().get("Color"),
             "Size": self.attrset().get("Size"),
             "Title": self.attrset().get("Title"),
-            "SmallImageURL": self.attrset().get("SmallImage").get("URL") if self.attrset().get("SmallImage") is not None else ""
+            "SmallImageURL": self.attrset().get("SmallImage").get("URL") if self.attrset().get("SmallImage") is not None
+            else "",
+            "Height": self.height(),
+            "Length": self.width(),
+            "Width": self.length(),
+            "Weight": self.weight()
         }

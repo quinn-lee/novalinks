@@ -123,21 +123,15 @@ $(document).ready(function() {
                 },
                 {'data': 'price'
                 },
+                {'data': 'Length'
+                },
+                {'data': 'Width'
+                },
+                {'data': 'Height'
+                },
+                {'data': 'Weight'
+                },
                 {'data': 'Brand',
-                    render: function (data, type, full) {
-                        if(data != null){
-                            return "<a data-toggle='tooltip' title='" + data + "'> "+ data.substr(0,10) + "</a>";
-                        }
-                    }
-                },
-                {'data': 'Color',
-                    render: function (data, type, full) {
-                        if(data != null){
-                            return "<a data-toggle='tooltip' title='" + data + "'> "+ data.substr(0,10) + "</a>";
-                        }
-                    }
-                },
-                {'data': 'Size',
                     render: function (data, type, full) {
                         if(data != null){
                             return "<a data-toggle='tooltip' title='" + data + "'> "+ data.substr(0,10) + "</a>";
