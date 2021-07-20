@@ -56,22 +56,35 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="orders.html">
+            <a class="nav-link" href="/orders.html">
               <i class="mdi mdi-grid-large menu-icon"></i>
               <span class="menu-title">店铺销售分析</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="inventories.html">
+            <a class="nav-link" href="/inventories.html">
               <i class="mdi mdi-view-headline menu-icon"></i>
               <span class="menu-title">SKU信息</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="unshipped.html">
+            <a class="nav-link" href="/unshipped.html">
               <i class="mdi mdi-file-document-box-outline menu-icon"></i>
               <span class="menu-title">未发货订单</span>
             </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <i class="mdi mdi-account menu-icon"></i>
+              <span class="menu-title">用户</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="/admin/users/index.html"> 用户列表 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/users/new.html"> 新增用户 </a></li>
+              </ul>
+            </div>
           </li>
         </ul>
       </nav>

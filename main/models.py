@@ -23,6 +23,11 @@ class User(MongoModel):
 
     add_time = fields.DateTimeField(default=datetime.datetime.now)  # 添加时间
 
+    role = fields.CharField()  # 角色 admin/seller/operator/inspector
+    status = fields.IntegerField(default=0)  # 0-正常/1-停用
+
+
+
     class Meta:
         indexes = [
             IndexModel([('email', 1)], unique=True)
@@ -48,6 +53,13 @@ class User(MongoModel):
             aws_access_key=self.aws_access_key,
             role_arn=self.role_arn,
         )
+
+
+# 授权
+class Authorization(MongoModel):
+    from_user = fields.ReferenceField(User)  # 请求授权用户（角色为OPERATOR）
+    to_user = fields.ReferenceField(User)  # 接受授权用户（角色为SELLER）
+    status = fields.IntegerField()  # 授权状态（0-发起请求，1-接受，2-拒绝）
 
 
 # 登录日志
