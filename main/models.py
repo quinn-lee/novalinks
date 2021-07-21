@@ -71,11 +71,21 @@ class Authorization(MongoModel):
     request_time = fields.DateTimeField(default=datetime.datetime.now)  # operator请求时间
     processing_time = fields.DateTimeField()  # seller处理时间
 
-    def to_json(self):
+    def to_operator_json(self):
         return {
             'email': self.to_user.email,
             'name': self.to_user.name,
-            'status': {0: '等待卖家授权', 1: '已接受授权', 2: '已拒绝授权'}.get(self.status),
+            'status': {0: '等待卖家授权', 1: '接受授权', 2: '拒绝授权'}.get(self.status),
+            'request_time': self.request_time.strftime("%F %T"),
+            'processing_time': self.processing_time.strftime("%F %T") if self.processing_time is not None else ""
+        }
+
+    def to_seller_json(self):
+        return {
+            'id': str(self._id),
+            'email': self.from_user.email,
+            'name': self.from_user.name,
+            'status': {0: '待授权', 1: '已授权', 2: '拒绝授权'}.get(self.status),
             'request_time': self.request_time.strftime("%F %T"),
             'processing_time': self.processing_time.strftime("%F %T") if self.processing_time is not None else ""
         }

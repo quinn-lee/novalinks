@@ -35,7 +35,7 @@ def query_authorization_requests():
         return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
     auths = Authorization.objects.raw({'from_user': from_user._id})
 
-    data = [auth.to_json() for auth in auths]
+    data = [auth.to_operator_json() for auth in auths]
     current_app.logger.info(data)
     return jsonify(errno='0', data=data)
 

@@ -11,4 +11,5 @@ import main.api_1_0.admin.orders
 import main.api_1_0.admin.inventories
 import main.api_1_0.admin.users
 import main.api_1_0.operator.authorizations
+import main.api_1_0.seller.authorizations
 
