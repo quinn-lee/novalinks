@@ -1,6 +1,6 @@
 # coding:utf-8
 
-from .. import api
+from main.api_1_0 import api
 from flask import request, jsonify, current_app, session
 from main.models import User, Authorization
 from main.utils.response_code import RET

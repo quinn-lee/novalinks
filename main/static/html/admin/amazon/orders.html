@@ -55,20 +55,20 @@
       <!-- partial:../../partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link" href="/orders.html">
+                    <li class="nav-item">
+            <a class="nav-link" href="/admin/amazon/orders.html">
               <i class="mdi mdi-grid-large menu-icon"></i>
               <span class="menu-title">店铺销售分析</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/inventories.html">
+            <a class="nav-link" href="/admin/amazon/inventories.html">
               <i class="mdi mdi-view-headline menu-icon"></i>
               <span class="menu-title">SKU信息</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/unshipped.html">
+            <a class="nav-link" href="/admin/amazon/unshipped.html">
               <i class="mdi mdi-file-document-box-outline menu-icon"></i>
               <span class="menu-title">未发货订单</span>
             </a>
@@ -164,7 +164,7 @@
                       </tbody>
                       <script id="trTemplate" type="text/x-jsrender">
                         <tr>
-                          <td><a href="/orderdetails.html?start_date={{>start_date}}&end_date={{>end_date}}&email={{>email}}&name={{>user_name}}">{{>user_name}}</a></td>
+                          <td><a href="/admin/amazon/orderdetails.html?start_date={{>start_date}}&end_date={{>end_date}}&email={{>email}}&name={{>user_name}}">{{>user_name}}</a></td>
                           <td>{{>item_category_num}}</td>
                           <td>{{>sum_item_num}}</td>
                           <td>{{>sum_order_amount}}</td>
@@ -210,7 +210,7 @@
   <script src="/static/js/data-table.js"></script>
   <script src="/static/js/jquery.dataTables.js"></script>
   <script src="/static/js/dataTables.bootstrap4.js"></script>
-  <script src="/static/js/main/orders.js"></script>
+  <script src="/static/js/main/admin/orders.js"></script>
   <script src="/static/js/main/session.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->

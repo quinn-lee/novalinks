@@ -15,6 +15,21 @@ function decodeQuery(){
 
 $(document).ready(function() {
 
+    var queryData = decodeQuery();
+    var startDate = queryData["start_date"];
+    var endDate = queryData["end_date"];
+    var email = queryData["email"];
+    var name = queryData["name"];
+    if(startDate=='' || endDate=='' || email=='' ||
+        startDate==undefined || endDate==undefined || email==undefined){
+        location.href = "/admin/amazon/orders.html";
+    }
+    $("#start_date").val(startDate)
+    $("#end_date").val(endDate)
+    $("#email").val(email)
+    $("#user_name").val(name)
+
+
     //提示信息
     $.fn.dataTable.ext.errMode = 'none';
 
@@ -75,11 +90,14 @@ $(document).ready(function() {
                 param.start = data.start;//开始的记录序号
                 param.currentPage = (data.start / data.length) + 1;//当前页码
                 param.action = 'search';
+                param.email = email;
+                param.start_date = startDate;
+                param.end_date = endDate;
                 //console.log(param);
                 //ajax请求数据
                 $.ajax({
                     type: "GET",
-                    url: "/api/v1.0/order/unshipped",
+                    url: "/api/v1.0/order/details",
                     cache: false, //禁用缓存
                     data: param, //传入组装的参数
                     dataType: "json",
@@ -100,25 +118,16 @@ $(document).ready(function() {
             },
             "columns": [
                 //跟你要显示的字段是一一对应的。我这里只显示八列
-                {'data': 'AmazonOrderId',
-                    render: function (data, type, full) {
-                        if(data != null){
-                            return "<a href='unshippeditems.html?AmazonOrderId=" + data + "'>" + data + "</a>";
-                        }
-                    }
+                {'data': 'AmazonOrderId'
                 },
                 {'data': 'PurchaseDate'
                 },
-                {'data': 'OrderTotal'
+                {'data': 'order_amount'
                 },
-                {'data': 'OrderStatus'
+                {'data': 'item_category_num'
                 },
-                {'data': 'NumberOfItemsShipped'
+                {'data': 'item_num'
                 },
-                {'data': 'NumberOfItemsUnshipped'
-                },
-                {'data': 'ShippingAddress'
-                }
             ],
             "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull)            {                    //列样式处理
             }

@@ -7,7 +7,8 @@ api = Blueprint("api_1_0", __name__)
 # 导入蓝图视图
 import main.api_1_0.session
 import main.api_1_0.views
-import main.api_1_0.orders
-import main.api_1_0.inventories
+import main.api_1_0.admin.orders
+import main.api_1_0.admin.inventories
+import main.api_1_0.admin.users
 import main.api_1_0.operator.authorizations
 
