@@ -187,6 +187,22 @@ def operator_query_unauthorized_users():
     return jsonify(errno='0', data=data)
 
 
+@api.route("/query_authorization_request", methods=["GET"])
+def operator_query_authorization_request():
+    """operator 查询请求授权过的用户"""
+    current_email = session.get("email")
+    if current_email is None:
+        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+    from_user = User.objects.raw({'email': current_email}).first()
+    if from_user is None:
+        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+    auths = Authorization.objects.raw({'from_user': from_user._id})
+
+    data = [auth.to_json() for auth in auths]
+    current_app.logger.info(data)
+    return jsonify(errno='0', data=data)
+
+
 @api.route("/authorization_request", methods=["POST"])
 def operator_authorization_request():
     """operator 请求授权
