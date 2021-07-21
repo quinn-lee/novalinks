@@ -75,7 +75,7 @@ class Authorization(MongoModel):
         return {
             'email': self.to_user.email,
             'name': self.to_user.name,
-            'status': {0: '等待卖家授权', 1: '接受授权', 2: '拒绝授权'}.get(self.status),
+            'status': {0: '等待卖家授权', 1: '已授权', 2: '拒绝授权'}.get(self.status),
             'request_time': self.request_time.strftime("%F %T"),
             'processing_time': self.processing_time.strftime("%F %T") if self.processing_time is not None else ""
         }
