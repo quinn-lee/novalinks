@@ -60,6 +60,8 @@ class Authorization(MongoModel):
     from_user = fields.ReferenceField(User)  # 请求授权用户（角色为OPERATOR）
     to_user = fields.ReferenceField(User)  # 接受授权用户（角色为SELLER）
     status = fields.IntegerField()  # 授权状态（0-发起请求，1-接受，2-拒绝）
+    request_time = fields.DateTimeField(default=datetime.datetime.now)  # operator请求时间
+    processing_time = fields.DateTimeField()  # seller处理时间
 
 
 # 登录日志

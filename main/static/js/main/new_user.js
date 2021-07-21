@@ -73,7 +73,7 @@ $(document).ready(function() {
             success: function (data) {
                 if (data.errno == "0") {
                     // 创建成功，跳转到列表页
-                    location.href = "/admin/users/new.html";
+                    location.href = "/admin/users/index.html";
                 }
                 else {
                     // 其他错误信息，在页面中展示
