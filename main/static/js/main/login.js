@@ -42,8 +42,13 @@ $(document).ready(function() {
             },
             success: function (data) {
                 if (data.errno == "0") {
-                    // 登录成功，跳转到主页
-                    location.href = "/orders.html";
+                    if ( data.data == "admin" ) {
+                        // admin登录成功，跳转到主页
+                        location.href = "/admin/users/index.html";
+                    } else if ( data.data == "operator" ) {
+                        // operator登录成功，跳转到主页
+                        location.href = "/operator/authorization/index.html";
+                    }
                 }
                 else {
                     // 其他错误信息，在页面中展示

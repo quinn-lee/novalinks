@@ -62,7 +62,7 @@ def login():
     session["name"] = user.name
     session["email"] = user.email
 
-    return jsonify(errno=RET.OK, errmsg="登录成功")
+    return jsonify(errno=RET.OK, errmsg="登录成功", data=user.role)
 
 
 @api.route("/session", methods=["GET"])
@@ -163,8 +163,7 @@ def admin_query_users():
             users = users.raw({'email': req_dict.get('email')})
         if req_dict.get('role') is not None and req_dict.get('role') != '':
             users = users.raw({'role': req_dict.get('role')})
-    data = [{'email': user.email, 'name': user.name, 'role': user.role, 'status': {0: '正常', 1: '停用'}.get(user.status)}
-            for user in users]
+    data = [user.to_json() for user in users]
     current_app.logger.info(data)
     return jsonify(errno='0', data=data)
 

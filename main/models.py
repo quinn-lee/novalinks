@@ -36,6 +36,14 @@ class User(MongoModel):
     def __repr__(self):  # 查询的时候返回
         return "<User %r>" % self.name
 
+    def to_json(self):
+        return {
+            'email': self.email,
+            'name': self.name,
+            'role': self.role,
+            'status': {0: '正常', 1: '停用'}.get(self.status)
+        }
+
     def check_password(self, passwd):
         """
         检验密码正确性
