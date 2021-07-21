@@ -6,7 +6,7 @@ function getCookie(name) {
 // 页面初始化
 function init_page() {
     $.ajax({
-        url:"/api/v1.0/query_authorization_request",
+        url:"/api/v1.0/query_authorization_requests",
         type:"get",
         contentType: "application/json",
         dataType: "json",

@@ -9,4 +9,5 @@ import main.api_1_0.session
 import main.api_1_0.views
 import main.api_1_0.orders
 import main.api_1_0.inventories
+import main.api_1_0.operator.authorizations
 
