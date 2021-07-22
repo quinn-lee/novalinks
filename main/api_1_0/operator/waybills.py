@@ -9,6 +9,44 @@ from werkzeug.utils import secure_filename
 import datetime
 
 
+@api.route("/waybills/show_billing", methods=["GET"])
+def show_billing():
+    waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
+    if waybill is None:
+        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+    if waybill.lading_bill is None:
+        return jsonify(errno=RET.DBERR, errmsg="运单的提单文件不存在！")
+
+    f = waybill.lading_bill.file
+    url = "/files/lading_bills/{}.{}".format(str(waybill._id), waybill.lading_bill_ext())
+    with open("main/static/html{}".format(url), 'wb') as file:
+        file.write(f.read())
+
+    return jsonify(errno=RET.OK, data=url)
+
+
+@api.route("/waybills/operator/index", methods=["GET"])
+def waybill_index():
+    current_email = session.get("email")
+    if current_email is None:
+        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+    operator = User.objects.raw({'email': current_email}).first()
+    if operator is None:
+        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+
+    waybills = Waybill.objects.raw({'operator': operator._id})
+    if request.args.get('w_no') is not None and request.args.get('w_no') != '':
+        waybills = waybills.raw({'w_no': request.args.get('w_no')})
+    if request.args.get('customs_apply') is not None and request.args.get('customs_apply') != '':
+        waybills = waybills.raw({'customs_apply': request.args.get('customs_apply')})
+    if request.args.get('customs_declaration') is not None and request.args.get('customs_declaration') != '':
+        waybills = waybills.raw({'customs_declaration': request.args.get('customs_declaration')})
+    if request.args.get('depot_status') is not None and request.args.get('depot_status') != '':
+        waybills = waybills.raw({'depot_status': request.args.get('depot_status')})
+
+    return jsonify(errno=RET.OK, data=[waybill.to_json() for waybill in waybills], totalRows=waybills.count())
+
+
 @api.route("/waybills/create", methods=["POST"])
 def waybill_create():
     """operator 创建运单

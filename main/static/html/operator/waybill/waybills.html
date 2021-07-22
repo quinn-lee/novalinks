@@ -87,42 +87,85 @@
       <div class="main-panel">
         <div class="content-wrapper">
           <div class="row">
-
-            <div class="col-lg-12 grid-margin stretch-card">
+            <div class="col-md-12 grid-margin stretch-card">
               <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-md-2">
-                      <strong>授权列表</strong>
+                <div class="card-body dashboard-tabs p-0">
+                  <ul class="nav nav-tabs px-4" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="/operator/waybill/waybills.html" role="tab">所有</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/operator/waybill/applied.html" role="tab" >已报关</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/operator/waybill/cleared.html" role="tab" >已清关</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/operator/waybill/depoted.html" role="tab" >已入仓</a>
+                    </li>
+                  </ul>
+                  <div class="col-lg-12 stretch-card" style="padding-left: 0px; padding-right: 0px;">
+                    <div class="card">
+                      <div class="card-body">
+                        <form class="form-sample" id='search-form'>
+                        <div class="alert alert-danger" role="alert" id="notice" style="display: none;"></div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class="row">
+                              <label class="col-sm-3 col-form-label">运单号：</label>
+                              <div class="col-sm-9">
+                                <input type="text" class="form-control" name="w_no" id="w_no" />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                              <div class="form-group row">
+                                <button type="submit" class="btn btn-primary mr-2">搜索</button>
+                              </div>
+                            </div>
+                        </div>
+                        </form>
+                      </div>
                     </div>
                   </div>
-                  <div class="table-responsive">
-                    <table class="table table-striped" id="result-listing">
-                      <thead>
-                        <tr>
-                          <th>卖家Email</th>
-                          <th>卖家名称</th>
-                          <th>授权状态</th>
-                          <th>请求授权时间</th>
-                          <th>卖家处理授权时间</th>
-                        </tr>
-                      </thead>
-                      <tbody id='table-tr'>
-                      </tbody>
-                      <script id="trTemplate" type="text/x-jsrender">
-                        <tr>
-                          <td>{{>email}}</td>
-                          <td>{{>name}}</td>
-                          <td>{{>status}}</td>
-                          <td>{{>request_time}}</td>
-                          <td>{{>processing_time}}</td>
-                        </tr>
-                      </script>
-                    </table>
+
+                  <div class="col-lg-12 grid-margin stretch-card" style="padding-left: 0px; padding-right: 0px;">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-striped" id="table_details">
+                            <thead>
+                              <tr>
+                                <th>运单号(预报号)</th>
+                                <th>卖家</th>
+                                <th>收件人</th>
+                                <th>报关情况</th>
+                                <th>货运提单</th>
+                                <th>物流轨迹</th>
+                                <th>交货时间</th>
+                                <th>出运时间</th>
+                                <th>到港时间</th>
+                                <th>清关情况</th>
+                                <th>入仓情况</th>
+                                <th>箱数</th>
+                                <th>实重</th>
+                                <th>材重</th>
+                                <th>收费重</th>
+                                <th>费用</th>
+                                <th>申报价值</th>
+                              </tr>
+                            </thead>
+                            <tbody id='table-tr'>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
 
@@ -156,7 +199,7 @@
   <script src="/static/js/data-table.js"></script>
   <script src="/static/js/jquery.dataTables.js"></script>
   <script src="/static/js/dataTables.bootstrap4.js"></script>
-  <script src="/static/js/main/operator/authorizations.js"></script>
+  <script src="/static/js/main/operator/waybill_index.js"></script>
   <script src="/static/js/main/session.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
@@ -164,3 +207,12 @@
 </body>
 
 </html>
+
+<style>
+  .dataTables_wrapper .dataTable tbody tr td {
+    font-size: 12px;
+  }
+  .table thead th {
+    font-size: 12px;
+  }
+</style>

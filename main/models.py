@@ -4,6 +4,7 @@ from werkzeug.security import check_password_hash
 from pymodm import connect, fields, MongoModel, EmbeddedMongoModel
 from pymongo.operations import IndexModel
 from config import Config
+import os
 
 connect(Config.MONGODB_URI)
 
@@ -154,6 +155,7 @@ class Waybill(MongoModel):
 
     def to_json(self):
         return {
+            'id': str(self._id),
             'w_no': self.w_no,
             'seller': self.seller.name,
             'wms_user': self.wms_user,
@@ -167,13 +169,27 @@ class Waybill(MongoModel):
             'fare': self.fare,
             'declared_value': self.declared_value,
             'customs_apply': {0: '未报关', 1: '已报关'}.get(self.customs_apply),
+            'lading_bill': str(self._id) if self.lading_bill is not None else None,
             'delivery_time': self.delivery_time.strftime("%F") if self.delivery_time is not None else "",
             'etd': self.etd.strftime("%F") if self.etd is not None else "",
             'eta': self.eta.strftime("%F") if self.eta is not None else "",
             'customs_declaration': {0: '未清关', 1: '已清关'}.get(self.customs_declaration),
             'agent_info': self.agent_info,
-            'depot_status': {0: '未入仓', 1: '已入仓'}.get(self.depot_status)
+            'depot_status': {0: '未入仓', 1: '已入仓'}.get(self.depot_status),
+            'pod': str(self._id) if self.pod is not None else None,
         }
+
+    def lading_bill_ext(self):
+        if self.lading_bill_name is not None:
+            ext = os.path.splitext(self.lading_bill_name)[1]
+            if ext == '':
+                ext = os.path.splitext(self.lading_bill_name)[0]
+            if ext.startswith('.'):
+                # os.path.splitext retains . separator
+                ext = ext[1:]
+            return ext
+        else:
+            return ""
 
 
 # 运单物流轨迹

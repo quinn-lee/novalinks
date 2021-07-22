@@ -38,7 +38,6 @@ def create_user():
     name = req_dict.get("name")
     role = req_dict.get("role")
 
-
     # 校验参数
     # 参数完整的校验
     if not all([email, password, password_confirm, name, role]):
