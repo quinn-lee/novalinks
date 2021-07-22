@@ -5,7 +5,7 @@ function getCookie(name) {
 
 $(document).ready(function() {
 
-    $.get("/api/v1.0/query_unauthorized_users", function (resp) {
+    $.get("/api/v1.0/authorizations/unauthorized_users", function (resp) {
         if (resp.errno == "0") {
             var emails = resp.data;
             $( "#email" ).html(
@@ -39,7 +39,7 @@ $(document).ready(function() {
         // 将data转为json字符串
         var jsonData = JSON.stringify(data);
         $.ajax({
-            url:"/api/v1.0/authorization_request",
+            url:"/api/v1.0/authorizations/request",
             type:"post",
             data: jsonData,
             contentType: "application/json",

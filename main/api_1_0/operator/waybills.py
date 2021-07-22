@@ -7,7 +7,7 @@ from main.utils.response_code import RET
 from bson import ObjectId
 
 
-@api.route("/waybill_create", methods=["POST"])
+@api.route("/waybills/create", methods=["POST"])
 def waybill_create():
     """operator 创建运单
         参数： w_no, seller_email, depot_id

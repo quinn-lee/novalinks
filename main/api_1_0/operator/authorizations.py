@@ -6,7 +6,7 @@ from main.models import User, Authorization
 from main.utils.response_code import RET
 
 
-@api.route("/query_unauthorized_users", methods=["GET"])
+@api.route("/authorizations/unauthorized_users", methods=["GET"])
 def query_unauthorized_users():
     """operator 查询未经自己授权的用户"""
     users = User.objects.raw({'role': 'seller'})
@@ -24,7 +24,7 @@ def query_unauthorized_users():
     return jsonify(errno='0', data=data)
 
 
-@api.route("/query_authorized_users", methods=["GET"])
+@api.route("/authorizations/authorized", methods=["GET"])
 def query_authorized_users():
     """operator 查询已授权的用户"""
     current_email = session.get("email")
@@ -40,7 +40,7 @@ def query_authorized_users():
     return jsonify(errno='0', data=data)
 
 
-@api.route("/query_authorization_requests", methods=["GET"])
+@api.route("/authorizations/requests", methods=["GET"])
 def query_authorization_requests():
     """operator 查询请求授权过的用户"""
     current_email = session.get("email")
@@ -56,7 +56,7 @@ def query_authorization_requests():
     return jsonify(errno='0', data=data)
 
 
-@api.route("/authorization_request", methods=["POST"])
+@api.route("/authorizations/request", methods=["POST"])
 def authorization_request():
     """operator 请求授权
         参数： email

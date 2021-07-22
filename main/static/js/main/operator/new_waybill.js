@@ -6,7 +6,7 @@ function getCookie(name) {
 
 $(document).ready(function() {
 
-    $.get("/api/v1.0/query_authorized_users", function (resp) {
+    $.get("/api/v1.0/authorizations/authorized", function (resp) {
         if (resp.errno == "0") {
             var sellers = resp.data;
             $( "#seller" ).html(
@@ -19,7 +19,7 @@ $(document).ready(function() {
 
     }, "json");
 
-    $.get("/api/v1.0/query_depots", function (resp) {
+    $.get("/api/v1.0/depots/index", function (resp) {
         if (resp.errno == "0") {
             var sellers = resp.data;
             $( "#depot" ).html(
@@ -71,7 +71,7 @@ $(document).ready(function() {
         // 将data转为json字符串
         var jsonData = JSON.stringify(data);
         $.ajax({
-            url:"/api/v1.0/waybill_create",
+            url:"/api/v1.0/waybills/create",
             type:"post",
             data: jsonData,
             contentType: "application/json",
@@ -82,7 +82,7 @@ $(document).ready(function() {
             success: function (data) {
                 if (data.errno == "0") {
                     // 创建成功，跳转到列表页
-                    location.href = "/operator/waybill/new.html";
+                    location.href = "/operator/waybill/index.html";
                 }
                 else {
                     // 其他错误信息，在页面中展示

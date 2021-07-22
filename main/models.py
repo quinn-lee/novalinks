@@ -143,13 +143,36 @@ class Waybill(MongoModel):
     eta = fields.DateTimeField()  # 到港时间，国际运输物流的ETA，操作员填写
     customs_declaration = fields.IntegerField()  # 清关情况，0-未清关，1-已清关（点击可查看海外代理信息），由操作员填写
     agent_info = fields.CharField()  # 海外代理信息，点击清关情况时可以查看
-    depot_status = fields.IntegerField()  # 未入仓，已入仓（点击可查看POD，操作员上传）
+    depot_status = fields.IntegerField()  # 0-未入仓，1-已入仓（点击可查看POD，操作员上传）
     pod = fields.FileField()  # pod文件
 
     class Meta:
         indexes = [
             IndexModel([('w_no', 1)], unique=True)
         ]
+
+    def to_json(self):
+        return {
+            'w_no': self.w_no,
+            'seller': self.seller.name,
+            'wms_user': self.wms_user,
+            'operator': self.operator.name,
+            'depot': self.depot.name,
+            'wms_info': self.wms_info,
+            'cont_num': self.cont_num,
+            'real_weight': self.real_weight,
+            'volume_weight': self.volume_weight,
+            'billing_weight': self.billing_weight,
+            'fare': self.fare,
+            'declared_value': self.declared_value,
+            'customs_apply': {0: '未报关', 1: '已报关'}.get(self.customs_apply),
+            'delivery_time': self.delivery_time.strftime("%F") if self.delivery_time is not None else "",
+            'etd': self.etd.strftime("%F") if self.etd is not None else "",
+            'eta': self.eta.strftime("%F") if self.eta is not None else "",
+            'customs_declaration': {0: '未清关', 1: '已清关'}.get(self.customs_declaration),
+            'agent_info': self.agent_info,
+            'depot_status': {0: '未入仓', 1: '已入仓'}.get(self.depot_status)
+        }
 
 
 # 运单物流轨迹

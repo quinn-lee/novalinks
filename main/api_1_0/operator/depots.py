@@ -5,7 +5,7 @@ from flask import jsonify, current_app
 from main.models import Depot
 
 
-@api.route("/query_depots", methods=["GET"])
+@api.route("/depots/index", methods=["GET"])
 def query_depots():
     """查询仓库信息"""
     depots = Depot.objects.raw({'is_use': True})
