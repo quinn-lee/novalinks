@@ -24,8 +24,8 @@ def seller_authorization_requests():
     return jsonify(errno='0', data=data)
 
 
-@api.route("/pending_seller_authorization_requests", methods=["GET"])
-def pending_seller_authorization_requests():
+@api.route("/authorizations/pending_requests", methods=["GET"])
+def pending_requests():
     """seller 查询待处理请求授权的数据"""
     current_email = session.get("email")
     if current_email is None:
@@ -40,8 +40,8 @@ def pending_seller_authorization_requests():
     return jsonify(errno='0', data=data)
 
 
-@api.route("/processing_auth", methods=["GET"])
-def processing_auth():
+@api.route("/authorizations/processing", methods=["GET"])
+def processing():
     """处理授权
     参数： id, status
     """

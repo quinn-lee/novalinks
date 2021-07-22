@@ -5,7 +5,7 @@ function getCookie(name) {
 
 $(document).ready(function() {
 
-    $.get("/api/v1.0/pending_seller_authorization_requests", function(resp){
+    $.get("/api/v1.0/authorizations/pending_requests", function(resp){
         if ("4101" == resp.errno) {
             // 用户未登录
             location.href = "/login.html";

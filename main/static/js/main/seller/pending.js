@@ -6,7 +6,7 @@ function getCookie(name) {
 // 页面初始化
 function init_page() {
     $.ajax({
-        url:"/api/v1.0/pending_seller_authorization_requests",
+        url:"/api/v1.0/authorizations/pending_requests",
         type:"get",
         contentType: "application/json",
         dataType: "json",
@@ -37,7 +37,7 @@ function init_page() {
 
 function auth(obj) {
     $.ajax({
-        url:"/api/v1.0/processing_auth?id="+obj.id+"&status=1",
+        url:"/api/v1.0/authorizations/processing?id="+obj.id+"&status=1",
         type:"get",
         contentType: "application/json",
         dataType: "json",
@@ -57,7 +57,7 @@ function auth(obj) {
 
 function unauth(obj) {
     $.ajax({
-        url:"/api/v1.0/processing_auth?id="+obj.id+"&status=2",
+        url:"/api/v1.0/authorizations/processing?id="+obj.id+"&status=2",
         type:"get",
         contentType: "application/json",
         dataType: "json",
