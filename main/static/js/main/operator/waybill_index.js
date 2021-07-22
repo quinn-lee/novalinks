@@ -15,7 +15,7 @@ function decodeQuery(){
 
 function show_billing(obj) {
     $.ajax({
-        url:"/api/v1.0/waybills/show_billing?id="+obj.id,
+        url:"/api/v1.0/waybills/show_billing?id="+obj.id.split("_")[1],
         type:"get",
         contentType: "application/json",
         dataType: "json",
@@ -127,6 +127,11 @@ $(document).ready(function() {
             },
             "columns": [
                 //跟你要显示的字段是一一对应的。
+                {'data': 'id',  "orderable": false,
+                    render: function (data, type, full) {
+                         return "<a href='/operator/waybill/edit.html?id="+ data + "'>编辑" + "</a>";
+                    }
+                },
                 {'data': 'w_no'
                 },
                 {'data': 'seller'
@@ -135,14 +140,14 @@ $(document).ready(function() {
                 },
                 {'data': 'customs_apply'
                 },
-                {'data': 'lading_bill',
+                {'data': 'lading_bill',  "orderable": false,
                     render: function (data, type, full) {
                         if(data != null){
-                            return "<a href='#' id='"+ data + "' onclick=show_billing(this);>查看" + "</a>";
+                            return "<a href='#' id='billing_"+ data + "' onclick=show_billing(this);>查看" + "</a>";
                         }
                     }
                 },
-                {'data': ''
+                {'data': '',  "orderable": false
                 },
                 {'data': 'delivery_time'
                 },

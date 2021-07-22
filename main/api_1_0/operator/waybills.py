@@ -9,6 +9,15 @@ from werkzeug.utils import secure_filename
 import datetime
 
 
+@api.route("/waybills/edit", methods=["GET"])
+def waybill_edit():
+    waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
+    if waybill is None:
+        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+
+    return jsonify(errno=RET.OK, data=waybill.to_json())
+
+
 @api.route("/waybills/show_billing", methods=["GET"])
 def show_billing():
     waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
@@ -113,3 +122,46 @@ def waybill_create():
         return jsonify(errno=RET.DBERR, errmag="数据库异常")
 
     return jsonify(errno=RET.OK, errmsg="运单创建成功")
+
+
+@api.route("/waybills/update", methods=["POST"])
+def waybill_update():
+    """operator 修改运单
+        参数： w_no, seller_email, depot_id
+        """
+    # 获取参数
+    billing_weight = request.form.get('billing_weight')
+    customs_apply = request.form.get('customs_apply')
+    delivery_time = request.form.get('delivery_time')
+    customs_declaration = request.form.get('customs_declaration')
+    etd = request.form.get('etd')
+    eta = request.form.get('eta')
+    waybill_id = request.form.get('id')
+
+    if waybill_id is None or waybill_id == "":
+        return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
+
+    waybill = Waybill.objects.raw({'_id': ObjectId(waybill_id)}).first()
+    if waybill is None:
+        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+
+    # 保存记录
+    try:
+        if delivery_time is not None and delivery_time != "":
+            waybill.delivery_time = datetime.datetime.strptime(delivery_time, '%Y/%m/%d')
+        if etd is not None and etd != "":
+            waybill.etd = datetime.datetime.strptime(etd, '%Y/%m/%d')
+        if eta is not None and eta != "":
+            waybill.eta = datetime.datetime.strptime(eta, '%Y/%m/%d')
+        if billing_weight is not None and billing_weight != "":
+            waybill.billing_weight = billing_weight
+        if customs_apply is not None and customs_apply != "":
+            waybill.customs_apply = customs_apply
+        if customs_declaration is not None and customs_declaration != "":
+            waybill.customs_declaration = customs_declaration
+        waybill.save()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmag="数据库异常")
+
+    return jsonify(errno=RET.OK, errmsg="运单修改成功")

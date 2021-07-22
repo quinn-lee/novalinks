@@ -169,13 +169,16 @@ class Waybill(MongoModel):
             'fare': self.fare,
             'declared_value': self.declared_value,
             'customs_apply': {0: '未报关', 1: '已报关'}.get(self.customs_apply),
+            'ca_code': self.customs_apply,
             'lading_bill': str(self._id) if self.lading_bill is not None else None,
             'delivery_time': self.delivery_time.strftime("%F") if self.delivery_time is not None else "",
             'etd': self.etd.strftime("%F") if self.etd is not None else "",
             'eta': self.eta.strftime("%F") if self.eta is not None else "",
             'customs_declaration': {0: '未清关', 1: '已清关'}.get(self.customs_declaration),
+            'cd_code': self.customs_declaration,
             'agent_info': self.agent_info,
             'depot_status': {0: '未入仓', 1: '已入仓'}.get(self.depot_status),
+            'ds_code': self.depot_status,
             'pod': str(self._id) if self.pod is not None else None,
         }
 
