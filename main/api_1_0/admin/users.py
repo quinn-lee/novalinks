@@ -17,7 +17,7 @@ def users():
     return jsonify(errno='0', data=data)
 
 
-@api.route("/create_user", methods=["POST"])
+@api.route("/users/create", methods=["POST"])
 def create_user():
     """admin创建用户
         参数： 用户名 邮箱 密码 密码确认 角色
@@ -67,7 +67,7 @@ def create_user():
     return jsonify(errno=RET.OK, errmsg="用户创建成功")
 
 
-@api.route("/query_users", methods=["POST"])
+@api.route("/users/index", methods=["POST"])
 def query_users():
     """admin/inspector查询用户数据"""
     try:

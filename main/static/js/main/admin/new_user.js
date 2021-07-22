@@ -62,7 +62,7 @@ $(document).ready(function() {
         // 将data转为json字符串
         var jsonData = JSON.stringify(data);
         $.ajax({
-            url:"/api/v1.0/create_user",
+            url:"/api/v1.0/users/create",
             type:"post",
             data: jsonData,
             contentType: "application/json",
