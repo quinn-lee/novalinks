@@ -5,6 +5,8 @@ from flask import request, jsonify, current_app, session
 from main.models import User, Authorization, Waybill, Depot
 from main.utils.response_code import RET
 from bson import ObjectId
+from werkzeug.utils import secure_filename
+import datetime
 
 
 @api.route("/waybills/create", methods=["POST"])
@@ -13,18 +15,16 @@ def waybill_create():
         参数： w_no, seller_email, depot_id
         """
     # 获取参数
-    current_app.logger.info("request_data: {}".format(request.get_data()))
-    try:
-        current_app.logger.info("request_json: {}".format(request.get_json()))
-        req_dict = request.get_json()
-    except Exception as e:
-        current_app.logger.info(e)
-        return jsonify(errno=RET.NOTJSON, errmsg="参数非Json格式")
-    if req_dict is None:
-        return jsonify(errno=RET.NOTJSON, errmsg="参数非Json格式")
-    seller_email = req_dict.get("seller_email")
-    w_no = req_dict.get('w_no')
-    depot_id = req_dict.get('depot_id')
+    seller_email = request.form.get("seller_email")
+    w_no = request.form.get('w_no')
+    depot_id = request.form.get('depot_id')
+    lading_bill = request.files.get('lading_bill')
+    billing_weight = request.form.get('billing_weight')
+    customs_apply = request.form.get('customs_apply')
+    delivery_time = request.form.get('delivery_time')
+    customs_declaration = request.form.get('customs_declaration')
+    etd = request.form.get('etd')
+    eta = request.form.get('eta')
 
     # 校验参数
     # 参数完整的校验
@@ -54,6 +54,21 @@ def waybill_create():
     # 保存记录
     try:
         waybill = Waybill(w_no=w_no, seller=seller, operator=operator, depot=depot)
+        if lading_bill is not None:
+            waybill.lading_bill = lading_bill
+            waybill.lading_bill_name = secure_filename(lading_bill.filename)
+        if delivery_time is not None and delivery_time != "":
+            waybill.delivery_time = datetime.datetime.strptime(delivery_time, '%Y/%m/%d')
+        if etd is not None and etd != "":
+            waybill.etd = datetime.datetime.strptime(etd, '%Y/%m/%d')
+        if eta is not None and eta != "":
+            waybill.eta = datetime.datetime.strptime(eta, '%Y/%m/%d')
+        if billing_weight is not None and billing_weight != "":
+            waybill.billing_weight = billing_weight
+        if customs_apply is not None and customs_apply != "":
+            waybill.customs_apply = customs_apply
+        if customs_declaration is not None and customs_declaration != "":
+            waybill.customs_declaration = customs_declaration
         waybill.save()
     except Exception as e:
         current_app.logger.error(e)

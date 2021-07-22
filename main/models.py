@@ -138,6 +138,7 @@ class Waybill(MongoModel):
     declared_value = fields.FloatField()  # 申报价值，wms备案换算
     customs_apply = fields.IntegerField()  # 报关情况，0-未报关，1-已报关，由操作员填写
     lading_bill = fields.FileField()  # 货运提单，由操作员上传
+    lading_bill_name = fields.CharField()
     delivery_time = fields.DateTimeField()  # 交货时间，工厂装柜日期，操作员填写
     etd = fields.DateTimeField()  # 出运时间，国际运输物流的ETD，操作员填写
     eta = fields.DateTimeField()  # 到港时间，国际运输物流的ETA，操作员填写

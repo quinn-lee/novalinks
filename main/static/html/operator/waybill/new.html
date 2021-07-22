@@ -92,14 +92,14 @@
                 <div class="card-body">
                   <h4 class="card-title">新增运单</h4>
                   <p class="card-description">
-                    选择卖家及收件仓库，运单号填写FBA号或者北极光IN号
+                    选择卖家及收件仓库，运单号填写FBA号或者北极光IN号，其余信息可以在创建完后修改。
                   </p>
                   <form class="forms-sample" id="new_waybill">
                     <div class="alert alert-danger" role="alert" id="notice" style="display: none;"></div>
                     <div class="row">
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">卖家：</label>
+                          <label class="col-sm-3 col-form-label">卖家*：</label>
                           <div class="col-sm-9">
                             <select class="form-control" id="seller" name='seller'>
                             </select>
@@ -109,23 +109,99 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">运单号：</label>
+                          <label class="col-sm-3 col-form-label">运单号*：</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" name="w_no" id="w_no"/>
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-4">
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">收件人：</label>
+                          <label class="col-sm-3 col-form-label">收件人*：</label>
                           <div class="col-sm-9">
                             <select class="form-control" id="depot" name='depot'>
                             </select>
                             <script id="depotTemplate" type="text/x-jsrender">
                               <option value={{>id}}>{{>name}}</option>
                             </script>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">收费重：</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" name="billing_weight" id="billing_weight"/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">报关情况：</label>
+                          <div class="col-sm-9">
+                            <select class="form-control" id="customs_apply" name='customs_apply'>
+                              <option value="0">未报关</option>
+                              <option value="1">已报关</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">货运提单：</label>
+                          <div class="col-sm-9">
+                            <input type="file" name="lading_bill[]" class="file-upload-default" id="lading_bill">
+                            <div class="input-group col-xs-12">
+                              <input type="text" class="form-control file-upload-info" disabled placeholder="Upload File">
+                              <span class="input-group-append">
+                                <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">交货时间：</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control datepicker" name="delivery_time" id="delivery_time"/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">清关情况：</label>
+                          <div class="col-sm-9">
+                            <select class="form-control" id="customs_declaration" name='customs_declaration'>
+                              <option value="0">未清关</option>
+                              <option value="1">已清关</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">出运时间：</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control datepicker" name="etd" id="etd"/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">到港时间：</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control datepicker" name="eta" id="eta"/>
                           </div>
                         </div>
                       </div>
@@ -174,6 +250,7 @@
   <script src="/static/js/data-table.js"></script>
   <script src="/static/js/jquery.dataTables.js"></script>
   <script src="/static/js/dataTables.bootstrap4.js"></script>
+  <script src="/static/js/file-upload.js"></script>
   <script src="/static/js/main/operator/new_waybill.js"></script>
   <script src="/static/js/main/session.js"></script>
   <!-- endinject -->
