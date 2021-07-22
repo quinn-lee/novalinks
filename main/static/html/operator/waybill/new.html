@@ -90,23 +90,53 @@
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">请求卖家授权</h4>
+                  <h4 class="card-title">新增运单</h4>
                   <p class="card-description">
-                    选择需要请求授权的卖家
+                    选择卖家及收件仓库，运单号填写FBA号或者北极光IN号
                   </p>
-                  <form class="forms-sample" id="authorization_request">
+                  <form class="forms-sample" id="new_waybill">
                     <div class="alert alert-danger" role="alert" id="notice" style="display: none;"></div>
-                    <div class="form-group row">
-                      <label for="email" class="col-sm-3 col-form-label">卖家</label>
-                      <div class="col-sm-9">
-                        <select class="form-control" id="email" name='email'>
-                        </select>
-                        <script id="userTemplate" type="text/x-jsrender">
-                          <option value={{>email}}>{{>name}}</option>
-                        </script>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">卖家：</label>
+                          <div class="col-sm-9">
+                            <select class="form-control" id="seller" name='seller'>
+                            </select>
+                            <script id="sellerTemplate" type="text/x-jsrender">
+                              <option value={{>email}}>{{>name}}</option>
+                            </script>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">运单号：</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" name="w_no" id="w_no"/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">收件人：</label>
+                          <div class="col-sm-9">
+                            <select class="form-control" id="depot" name='depot'>
+                            </select>
+                            <script id="depotTemplate" type="text/x-jsrender">
+                              <option value={{>id}}>{{>name}}</option>
+                            </script>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <button type="submit" class="btn btn-primary mr-2">发起请求</button>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group row">
+                          <button type="submit" class="btn btn-primary mr-2">创建</button>
+                        </div>
+                      </div>
+                    </div>
                   </form>
                 </div>
               </div>
@@ -140,11 +170,11 @@
   <script src="/static/js/hoverable-collapse.js"></script>
   <script src="/static/js/template.js"></script>
   <script src="/static/js/jsrender.min.js"></script>
-  <script src="/static/js/jquery.duserTemplateatetimepicker.full.min.js"></script>
+  <script src="/static/js/jquery.datetimepicker.full.min.js"></script>
   <script src="/static/js/data-table.js"></script>
   <script src="/static/js/jquery.dataTables.js"></script>
   <script src="/static/js/dataTables.bootstrap4.js"></script>
-  <script src="/static/js/main/operator/authorization_request.js"></script>
+  <script src="/static/js/main/operator/new_waybill.js"></script>
   <script src="/static/js/main/session.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->

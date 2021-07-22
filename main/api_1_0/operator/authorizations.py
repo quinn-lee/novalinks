@@ -24,6 +24,22 @@ def query_unauthorized_users():
     return jsonify(errno='0', data=data)
 
 
+@api.route("/query_authorized_users", methods=["GET"])
+def query_authorized_users():
+    """operator 查询已授权的用户"""
+    current_email = session.get("email")
+    if current_email is None:
+        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+    from_user = User.objects.raw({'email': current_email}).first()
+    if from_user is None:
+        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+    auths = Authorization.objects.raw({'from_user': from_user._id, 'status': 1})
+    data = [auth.to_operator_json() for auth in auths]
+    data.insert(0, {'email': '', 'name': ''})
+    current_app.logger.info(data)
+    return jsonify(errno='0', data=data)
+
+
 @api.route("/query_authorization_requests", methods=["GET"])
 def query_authorization_requests():
     """operator 查询请求授权过的用户"""

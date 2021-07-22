@@ -26,8 +26,6 @@ class User(MongoModel):
     role = fields.CharField()  # 角色 admin/seller/operator/inspector
     status = fields.IntegerField(default=0)  # 0-正常/1-停用
 
-
-
     class Meta:
         indexes = [
             IndexModel([('email', 1)], unique=True)
@@ -89,6 +87,78 @@ class Authorization(MongoModel):
             'request_time': self.request_time.strftime("%F %T"),
             'processing_time': self.processing_time.strftime("%F %T") if self.processing_time is not None else ""
         }
+
+
+# 仓库
+class Depot(MongoModel):
+    code = fields.CharField()
+    name = fields.CharField()
+    country = fields.CharField()
+    province = fields.CharField()
+    city = fields.CharField()
+    district = fields.CharField()
+    street = fields.CharField()
+    street_number = fields.CharField()
+    house_number = fields.CharField()
+    postcode = fields.CharField()
+    telephone = fields.CharField()
+    is_use = fields.BooleanField(default=True)
+
+    def to_json(self):
+        return {
+            'id': str(self._id),
+            'code': self.code,
+            'name': self.name,
+            'country': self.country,
+            'province': self.province,
+            'city': self.city,
+            'district': self.district,
+            'street': self.street,
+            'street_number': self.street_number,
+            'house_number': self.house_number,
+            'postcode': self.postcode,
+            'telephone': self.telephone,
+            'is_use': self.is_use
+        }
+
+
+# 运单
+class Waybill(MongoModel):
+    w_no = fields.CharField()  # 运单号（预报号）
+    seller = fields.ReferenceField(User)  # 用户（卖家名）
+    wms_user = fields.CharField()  # wms用户名
+    operator = fields.ReferenceField(User)  # 服务商（操作员）
+    depot = fields.ReferenceField(Depot)  # 收件人（地址代号）
+    wms_info = fields.DictField()  # wms同步过来的信息
+    cont_num = fields.IntegerField()  # 箱数，与WMS同步
+    real_weight = fields.FloatField()  # 实重，与WMS同步
+    volume_weight = fields.FloatField()  # 材重，与WMS同步
+    billing_weight = fields.FloatField()  # 收费重，操作员填写
+    fare = fields.FloatField()  # 费用，计算
+    declared_value = fields.FloatField()  # 申报价值，wms备案换算
+    customs_apply = fields.IntegerField()  # 报关情况，0-未报关，1-已报关，由操作员填写
+    lading_bill = fields.FileField()  # 货运提单，由操作员上传
+    delivery_time = fields.DateTimeField()  # 交货时间，工厂装柜日期，操作员填写
+    etd = fields.DateTimeField()  # 出运时间，国际运输物流的ETD，操作员填写
+    eta = fields.DateTimeField()  # 到港时间，国际运输物流的ETA，操作员填写
+    customs_declaration = fields.IntegerField()  # 清关情况，0-未清关，1-已清关（点击可查看海外代理信息），由操作员填写
+    agent_info = fields.CharField()  # 海外代理信息，点击清关情况时可以查看
+    depot_status = fields.IntegerField()  # 未入仓，已入仓（点击可查看POD，操作员上传）
+    pod = fields.FileField()  # pod文件
+
+    class Meta:
+        indexes = [
+            IndexModel([('w_no', 1)], unique=True)
+        ]
+
+
+# 运单物流轨迹
+class TrackingInfo(MongoModel):
+    waybill = fields.ReferenceField(Waybill)
+    event = fields.CharField()
+    description = fields.CharField()
+    location = fields.CharField()
+    event_time = fields.DateTimeField(default=datetime.datetime.now)
 
 
 # 登录日志
