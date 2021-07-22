@@ -34,6 +34,7 @@ $(document).ready(function() {
                 $("#delivery_time").val(resp.data['delivery_time'])
                 $("#etd").val(resp.data['etd'])
                 $("#eta").val(resp.data['eta'])
+                $("#agent_info").val(resp.data['agent_info'])
                 $("#customs_apply").val(resp.data['ca_code']);
                 $("#customs_declaration").val(resp.data['cd_code']);
             }
@@ -71,6 +72,7 @@ $(document).ready(function() {
         formData.append("customs_declaration", $("#customs_declaration").find("option:selected").val());
         formData.append("etd", $("#etd").val());
         formData.append("eta", $("#eta").val());
+        formData.append("agent_info", $("#agent_info").val());
         formData.append("id", $("#waybill_id").val())
 
         $.ajax({

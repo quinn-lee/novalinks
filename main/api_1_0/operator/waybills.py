@@ -137,6 +137,7 @@ def waybill_update():
     etd = request.form.get('etd')
     eta = request.form.get('eta')
     waybill_id = request.form.get('id')
+    agent_info = request.form.get('agent_info')
 
     if waybill_id is None or waybill_id == "":
         return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
@@ -159,6 +160,8 @@ def waybill_update():
             waybill.customs_apply = customs_apply
         if customs_declaration is not None and customs_declaration != "":
             waybill.customs_declaration = customs_declaration
+        if agent_info is not None and agent_info != "":
+            waybill.agent_info = agent_info
         waybill.save()
     except Exception as e:
         current_app.logger.error(e)
