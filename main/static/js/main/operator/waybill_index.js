@@ -221,7 +221,7 @@ $(document).ready(function() {
                 //跟你要显示的字段是一一对应的。
                 {'data': null,  "orderable": false,
                     render: function (data, type, full) {
-                         return "<a href='/operator/waybill/edit.html?id="+ data.id + "'>修改" + "</a>&nbsp;&nbsp;<a href='#' id='delwaybill_"+ data.id + "' onclick=delete_waybill(this);>删除" + "</a>";
+                         return "<a title='修改运单信息' href='/operator/waybill/edit.html?id="+ data.id + "'><i class='mdi mdi-table-edit text-warning'></i>" + "</a>&nbsp;&nbsp;<a title='删除运单' href='#' id='delwaybill_"+ data.id + "' onclick=delete_waybill(this);><i class='mdi mdi-delete-forever text-danger'></i>" + "</a>";
                     }
                 },
                 {'data': 'w_no'
@@ -235,9 +235,9 @@ $(document).ready(function() {
                 {'data': null,  "orderable": false,
                     render: function (data, type, full) {
                         if(data.lading_bill != null){
-                            return "<a href='#' id='billing_"+ data.id + "' onclick=show_billing(this);>查看" + "</a>&nbsp;&nbsp;<a href='#' id='delbilling_"+ data.id + "' onclick=delete_billing(this);>删除" + "</a>";
+                            return "<a title='查看提单' href='#' id='billing_"+ data.id + "' onclick=show_billing(this);><i class='mdi mdi-file-find text-success'></i>" + "</a>&nbsp;&nbsp;<a title='删除提单' href='#' id='delbilling_"+ data.id + "' onclick=delete_billing(this);><i class='mdi mdi-delete-forever text-danger'></i>" + "</a>";
                         } else {
-                            return "<a href='/operator/waybill/lading_bill_upload.html?id="+ data.id + "'>上传" + "</a>";
+                            return "<a title='上传提单' href='/operator/waybill/lading_bill_upload.html?id="+ data.id + "'><i class='mdi mdi-upload text-success'></i>" + "</a>";
                         }
                     }
                 },
@@ -254,9 +254,9 @@ $(document).ready(function() {
                 {'data': null,  "orderable": false,
                     render: function (data, type, full) {
                         if(data.pod != null){
-                            return data.depot_status+"&nbsp;<a href='#' id='pod_"+ data.id + "' onclick=show_pod(this);>查看POD" + "</a>&nbsp;&nbsp;<a href='#' id='delpod_"+ data.id + "' onclick=delete_pod(this);>删除POD" + "</a>";
+                            return data.depot_status+"&nbsp;<a title='查看POD' href='#' id='pod_"+ data.id + "' onclick=show_pod(this);><i class='mdi mdi-file-find text-success'></i>POD" + "</a>&nbsp;&nbsp;<a title='删除POD' href='#' id='delpod_"+ data.id + "' onclick=delete_pod(this);><i class='mdi mdi-delete-forever text-danger'></i>POD" + "</a>";
                         } else {
-                            return data.depot_status+"&nbsp;<a href='/operator/waybill/pod_upload.html?id="+ data.id + "'>上传POD" + "</a>";
+                            return data.depot_status+"&nbsp;<a title='上传POD' href='/operator/waybill/pod_upload.html?id="+ data.id + "'><i class='mdi mdi-upload text-success'></i>POD" + "</a>";
                         }
                     }
                 },

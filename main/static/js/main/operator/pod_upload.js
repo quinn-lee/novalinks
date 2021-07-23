@@ -39,18 +39,11 @@ $(document).ready(function() {
         }
     });
 
-    $("#click_upload").click(function(){
-        $("#notice").hide();
-    });
 
     $("#upload_pod").submit(function(e){
         e.preventDefault();
         pod = $("#pod")[0].files[0]
-        if (!pod) {
-            $("#notice").html("请选择文件上传！");
-            $("#notice").show();
-            return;
-        }
+
         var formData = new FormData();
         formData.append("pod",pod);
         formData.append("id", $("#waybill_id").val())
