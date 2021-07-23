@@ -247,11 +247,26 @@ $(document).ready(function() {
 
                     }
                 },
-                {'data': 'delivery_time'
+                {'data': 'delivery_time',
+                    render: function (data, type, full) {
+                        if(data != null){
+                            return data.split(" ").join("</br>");
+                        }
+                    }
                 },
-                {'data': 'etd'
+                {'data': 'etd',
+                    render: function (data, type, full) {
+                        if(data != null){
+                            return data.split(" ").join("</br>");
+                        }
+                    }
                 },
-                {'data': 'eta'
+                {'data': 'eta',
+                    render: function (data, type, full) {
+                        if(data != null){
+                            return data.split(" ").join("</br>");
+                        }
+                    }
                 },
                 {'data': 'customs_declaration'
                 },
