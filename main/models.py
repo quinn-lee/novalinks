@@ -145,8 +145,9 @@ class Waybill(MongoModel):
     eta = fields.DateTimeField(blank=True)  # 到港时间，国际运输物流的ETA，操作员填写
     customs_declaration = fields.IntegerField(blank=True)  # 清关情况，0-未清关，1-已清关（点击可查看海外代理信息），由操作员填写
     agent_info = fields.CharField(blank=True)  # 海外代理信息，点击清关情况时可以查看
-    depot_status = fields.IntegerField(blank=True)  # 0-未入仓，1-已入仓（点击可查看POD，操作员上传）
+    depot_status = fields.IntegerField(blank=True, default=0)  # 0-未入仓，1-已入仓（点击可查看POD，操作员上传）
     pod = fields.FileField(blank=True)  # pod文件
+    pod_name = fields.CharField(blank=True)  # pod文件
 
     class Meta:
         indexes = [
@@ -177,7 +178,7 @@ class Waybill(MongoModel):
             'customs_declaration': {0: '未清关', 1: '已清关'}.get(self.customs_declaration),
             'cd_code': self.customs_declaration,
             'agent_info': self.agent_info,
-            'depot_status': {0: '未入仓', 1: '已入仓'}.get(self.depot_status),
+            'depot_status': {0: '未入仓', 1: '已入仓'}.get(self.depot_status, ""),
             'ds_code': self.depot_status,
             'pod': str(self._id) if self.pod is not None else None,
         }
@@ -187,6 +188,18 @@ class Waybill(MongoModel):
             ext = os.path.splitext(self.lading_bill_name)[1]
             if ext == '':
                 ext = os.path.splitext(self.lading_bill_name)[0]
+            if ext.startswith('.'):
+                # os.path.splitext retains . separator
+                ext = ext[1:]
+            return ext
+        else:
+            return ""
+
+    def pod_ext(self):
+        if self.pod_name is not None:
+            ext = os.path.splitext(self.pod_name)[1]
+            if ext == '':
+                ext = os.path.splitext(self.pod_name)[0]
             if ext.startswith('.'):
                 # os.path.splitext retains . separator
                 ext = ext[1:]

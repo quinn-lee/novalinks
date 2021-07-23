@@ -52,6 +52,40 @@ def delete_billing():
     return jsonify(errno=RET.OK)
 
 
+@api.route("/waybills/show_pod", methods=["GET"])
+def show_pod():
+    waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
+    if waybill is None:
+        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+    if waybill.pod is None:
+        return jsonify(errno=RET.DBERR, errmsg="运单的提单文件不存在！")
+
+    f = waybill.pod.file
+    url = "/files/pods/{}.{}".format(str(waybill._id), waybill.pod_ext())
+    with open("main/static/html{}".format(url), 'wb') as file:
+        file.write(f.read())
+
+    return jsonify(errno=RET.OK, data=url)
+
+
+@api.route("/waybills/delete_pod", methods=["GET"])
+def delete_pod():
+    waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
+    if waybill is None:
+        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+
+    try:
+        waybill.pod = None
+        waybill.pod_name = None
+
+        waybill.save()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmag="数据库异常")
+
+    return jsonify(errno=RET.OK)
+
+
 @api.route("/waybills/delete", methods=["GET"])
 def delete_waybill():
     waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
@@ -219,7 +253,7 @@ def waybill_update():
 @api.route("/waybills/upload_lading_bill", methods=["POST"])
 def waybill_upload_lading_bill():
     """operator 上传提单
-        参数： w_no, lading_bill
+        参数： id, lading_bill
         """
     # 获取参数
     waybill_id = request.form.get('id')
@@ -243,4 +277,37 @@ def waybill_upload_lading_bill():
         current_app.logger.error(e)
         return jsonify(errno=RET.DBERR, errmag="数据库异常")
 
-    return jsonify(errno=RET.OK, errmsg="运单修改成功")
+    return jsonify(errno=RET.OK, errmsg="提单上传成功")
+
+
+@api.route("/waybills/upload_pod", methods=["POST"])
+def waybill_upload_pod():
+    """operator 上传pod
+        参数： id, pod, depot_status
+        """
+    # 获取参数
+    waybill_id = request.form.get('id')
+    depot_status = request.form.get('depot_status')
+
+    pod = request.files.get('pod')
+
+    if waybill_id is None or waybill_id == "":
+        return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
+
+    waybill = Waybill.objects.raw({'_id': ObjectId(waybill_id)}).first()
+    if waybill is None:
+        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+
+    # 保存记录
+    try:
+        if pod is not None:
+            waybill.pod = pod
+            waybill.pod_name = secure_filename(pod.filename)
+        if depot_status is not None and depot_status != "":
+            waybill.depot_status = depot_status
+        waybill.save()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmag="数据库异常")
+
+    return jsonify(errno=RET.OK, errmsg="POD上传成功")

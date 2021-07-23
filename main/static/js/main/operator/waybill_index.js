@@ -34,7 +34,7 @@ function show_billing(obj) {
 }
 
 function delete_billing(obj) {
-    conf = confirm("确认要删除该运单吗？");
+    conf = confirm("确认要删除已经存在的提单文件吗？");
     if (conf == false) {
         return
     }
@@ -64,6 +64,50 @@ function delete_waybill(obj) {
     }
     $.ajax({
         url:"/api/v1.0/waybills/delete?id="+obj.id.split("_")[1],
+        type:"get",
+        contentType: "application/json",
+        dataType: "json",
+        headers:{
+            "X-CSRFToken":getCookie("csrf_token")
+        },
+        success: function (resp) {
+            if (resp.errno == "0") {
+                location.href = "/operator/waybill/waybills.html"
+            }
+            else {
+                alert(resp.errmsg);
+            }
+        }
+    });
+}
+
+function show_pod(obj) {
+    $.ajax({
+        url:"/api/v1.0/waybills/show_pod?id="+obj.id.split("_")[1],
+        type:"get",
+        contentType: "application/json",
+        dataType: "json",
+        headers:{
+            "X-CSRFToken":getCookie("csrf_token")
+        },
+        success: function (resp) {
+            if (resp.errno == "0") {
+                open(resp.data);
+            }
+            else {
+                alert(resp.errmsg);
+            }
+        }
+    });
+}
+
+function delete_pod(obj) {
+    conf = confirm("确认要删除已经存在的POD文件吗？");
+    if (conf == false) {
+        return
+    }
+    $.ajax({
+        url:"/api/v1.0/waybills/delete_pod?id="+obj.id.split("_")[1],
         type:"get",
         contentType: "application/json",
         dataType: "json",
@@ -207,7 +251,14 @@ $(document).ready(function() {
                 },
                 {'data': 'customs_declaration'
                 },
-                {'data': 'depot_status'
+                {'data': null,  "orderable": false,
+                    render: function (data, type, full) {
+                        if(data.pod != null){
+                            return data.depot_status+"&nbsp;<a href='#' id='pod_"+ data.id + "' onclick=show_pod(this);>查看POD" + "</a>&nbsp;&nbsp;<a href='#' id='delpod_"+ data.id + "' onclick=delete_pod(this);>删除POD" + "</a>";
+                        } else {
+                            return data.depot_status+"&nbsp;<a href='/operator/waybill/pod_upload.html?id="+ data.id + "'>上传POD" + "</a>";
+                        }
+                    }
                 },
                 {'data': 'cont_num'
                 },
