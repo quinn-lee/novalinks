@@ -221,7 +221,7 @@ $(document).ready(function() {
                 //跟你要显示的字段是一一对应的。
                 {'data': null,  "orderable": false,
                     render: function (data, type, full) {
-                         return "<a title='修改运单信息' href='/operator/waybill/edit.html?id="+ data.id + "'><i class='mdi mdi-table-edit text-warning'></i>" + "</a>&nbsp;&nbsp;<a title='删除运单' href='#' id='delwaybill_"+ data.id + "' onclick=delete_waybill(this);><i class='mdi mdi-delete-forever text-danger'></i>" + "</a>";
+                         return "<a title='修改运单信息' href='/operator/waybill/edit.html?id="+ data.id + "'><i class='mdi mdi-table-edit text-success'></i>" + "</a>&nbsp;&nbsp;<a title='删除运单' href='#' id='delwaybill_"+ data.id + "' onclick=delete_waybill(this);><i class='mdi mdi-delete-forever text-danger'></i>" + "</a>";
                     }
                 },
                 {'data': 'w_no'
@@ -241,7 +241,11 @@ $(document).ready(function() {
                         }
                     }
                 },
-                {'data': '',  "orderable": false
+                {'data': null,  "orderable": false,
+                    render: function (data, type, full) {
+                        return "<a title='新增物流轨迹' href='/operator/waybill/new_tracking_info.html?id="+ data.id + "'><i class='mdi mdi-message-plus text-success'></i>" + "</a>";
+
+                    }
                 },
                 {'data': 'delivery_time'
                 },

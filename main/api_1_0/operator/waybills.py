@@ -2,7 +2,7 @@
 
 from main.api_1_0 import api
 from flask import request, jsonify, current_app, session
-from main.models import User, Authorization, Waybill, Depot
+from main.models import User, Authorization, Waybill, Depot, TrackingInfo
 from main.utils.response_code import RET
 from bson import ObjectId
 from werkzeug.utils import secure_filename
@@ -311,3 +311,34 @@ def waybill_upload_pod():
         return jsonify(errno=RET.DBERR, errmag="数据库异常")
 
     return jsonify(errno=RET.OK, errmsg="POD上传成功")
+
+
+@api.route("/waybills/tracking_info/create", methods=["POST"])
+def tracking_info_create():
+    """operator 新增物流轨迹
+        参数： id, event_time, location, event, description
+        """
+    # 获取参数
+    event_time = request.form.get('event_time')
+    location = request.form.get('location')
+    event = request.form.get('event')
+    description = request.form.get('description')
+    waybill_id = request.form.get('id')
+
+    if waybill_id is None or waybill_id == "":
+        return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
+
+    waybill = Waybill.objects.raw({'_id': ObjectId(waybill_id)}).first()
+    if waybill is None:
+        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+
+    # 保存记录
+    try:
+        tracking_info = TrackingInfo(waybill=waybill, event_time=datetime.datetime.strptime(event_time, '%Y/%m/%d'),
+                                     event=event, location=location, description=description)
+        tracking_info.save()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmag="数据库异常")
+
+    return jsonify(errno=RET.OK, errmsg="物流轨迹新增成功")

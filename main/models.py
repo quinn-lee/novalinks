@@ -211,9 +211,9 @@ class Waybill(MongoModel):
 # 运单物流轨迹
 class TrackingInfo(MongoModel):
     waybill = fields.ReferenceField(Waybill)
-    event = fields.CharField()
-    description = fields.CharField()
-    location = fields.CharField()
+    event = fields.CharField(blank=True)
+    description = fields.CharField(blank=True)
+    location = fields.CharField(blank=True)
     event_time = fields.DateTimeField(default=datetime.datetime.now)
 
 

@@ -91,87 +91,58 @@
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">修改运单</h4>
+                  <h4 class="card-title">新增物流轨迹</h4>
                   <p class="card-description">
                       运单号：<span id="w_no_show"></span>
                   </p>
-                  <form class="forms-sample" id="edit_waybill">
+                  <form class="forms-sample" id="create_tracking_info">
                     <div class="alert alert-danger" role="alert" id="notice" style="display: none;"></div>
                     <div class="row">
                       <input type="hidden" class="form-control" name="waybill_id" id="waybill_id"/>
-                      <div class="col-md-6">
+                      <div class="col-md-8">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">收费重：</label>
+                          <label class="col-sm-3 col-form-label">时间：</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" name="billing_weight" id="billing_weight"/>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">报关情况：</label>
-                          <div class="col-sm-9">
-                            <select class="form-control" id="customs_apply" name='customs_apply'>
-                              <option value="0">未报关</option>
-                              <option value="1">已报关</option>
-                            </select>
+                            <input type="text" class="form-control datepicker" name="event_time" id="event_time"/>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-md-6">
+                      <div class="col-md-8">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">出运时间：</label>
+                          <label class="col-sm-3 col-form-label">地点：</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control datepicker" name="etd" id="etd"/>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">到港时间：</label>
-                          <div class="col-sm-9">
-                            <input type="text" class="form-control datepicker" name="eta" id="eta"/>
+                            <input type="text" class="form-control" name="location" id="location"/>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-md-6">
+                      <div class="col-md-8">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">交货时间：</label>
+                          <label class="col-sm-3 col-form-label">事件：</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control datepicker" name="delivery_time" id="delivery_time"/>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">清关情况：</label>
-                          <div class="col-sm-9">
-                            <select class="form-control" id="customs_declaration" name='customs_declaration'>
-                              <option value="0">未清关</option>
-                              <option value="1">已清关</option>
-                            </select>
+                            <input type="text" class="form-control" name="event" id="event"/>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-md-6">
+                      <div class="col-md-8">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">清关代理信息：</label>
+                          <label class="col-sm-3 col-form-label">描述：</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" name="agent_info" id="agent_info"/>
+                            <input type="text" class="form-control" name="description" id="description"/>
                           </div>
                         </div>
                       </div>
                     </div>
+
                     <div class="row">
                       <div class="col-md-2">
                         <div class="form-group row">
-                          <button type="submit" class="btn btn-primary mr-2">修改</button>
+                          <button type="submit" class="btn btn-primary mr-2">新增</button>
                         </div>
                       </div>
                       <div class="col-md-2">
@@ -218,7 +189,7 @@
   <script src="/static/js/jquery.dataTables.js"></script>
   <script src="/static/js/dataTables.bootstrap4.js"></script>
   <script src="/static/js/file-upload.js"></script>
-  <script src="/static/js/main/operator/edit_waybill.js"></script>
+  <script src="/static/js/main/operator/new_tracking_info.js"></script>
   <script src="/static/js/main/session.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
