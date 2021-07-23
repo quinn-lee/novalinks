@@ -236,11 +236,11 @@ $(document).ready(function() {
                         return "<div class='dropdown'><a class='btn btn-secondary dropdown-toggle p-0 bg-transparent border-0 text-dark shadow-none font-weight-medium' href='#' style='font-size: 12px;' role='button' id='dropdownMenuLinkA' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='mb-0 d-inline-block'>" + data.w_no + "</span></a><div class='dropdown-menu' aria-labelledby='dropdownMenuLinkA'>" + html_str + "</div></div>"
                     }
                 },
-                {'data': 'seller'
+                {'data': 'seller',  "orderable": false
                 },
-                {'data': 'depot'
+                {'data': 'depot',  "orderable": false
                 },
-                {'data': 'customs_apply'
+                {'data': 'customs_apply',  "orderable": false
                 },
                 {'data': null,  "orderable": false,
                     render: function (data, type, full) {
@@ -253,25 +253,32 @@ $(document).ready(function() {
                 },
                 {'data': null,  "orderable": false,
                     render: function (data, type, full) {
-                        return "<a title='新增物流轨迹' href='/operator/waybill/new_tracking_info.html?id="+ data.id + "'><i class='mdi mdi-message-plus text-success'></i>" + "</a>";
+                        html_str = ""
+                        for(var i=0;i<data.tracking_infos.length;i++){
+                            html_str = html_str + "<a class='dropdown-item'><div class='item-content flex-grow'><h6 class='ellipsis font-weight-normal'>" + data.tracking_infos[i].event_time + "&nbsp;&nbsp;" + data.tracking_infos[i].location + "</h6><p class='font-weight-light small-text text-muted mb-0'>" + data.tracking_infos[i].event + "&nbsp;&nbsp;" + data.tracking_infos[i].description + "</p></div></a>"
+                        }
+                        if (html_str != ""){
+                            html_str = "<a title='查看物流轨迹' style='margin-right: 5px;' id='messageDropdown' href='#' data-toggle='dropdown'><i class='mdi mdi-message-text mx-0 text-info'></i></a><div class='dropdown-menu dropdown-menu-right navbar-dropdown' aria-labelledby='messageDropdown'>" + html_str + "</div>"
+                        }
+                        return html_str + "<a title='新增物流轨迹' href='/operator/waybill/new_tracking_info.html?id="+ data.id + "'><i class='mdi mdi-message-plus text-success'></i>" + "</a>";
 
                     }
                 },
-                {'data': 'delivery_time',
+                {'data': 'delivery_time', "orderable": false,
                     render: function (data, type, full) {
                         if(data != null){
                             return data.split(" ").join("</br>");
                         }
                     }
                 },
-                {'data': 'etd',
+                {'data': 'etd',  "orderable": false,
                     render: function (data, type, full) {
                         if(data != null){
                             return data.split(" ").join("</br>");
                         }
                     }
                 },
-                {'data': 'eta',
+                {'data': 'eta',  "orderable": false,
                     render: function (data, type, full) {
                         if(data != null){
                             return data.split(" ").join("</br>");
@@ -296,17 +303,17 @@ $(document).ready(function() {
                         }
                     }
                 },
-                {'data': 'cont_num'
+                {'data': 'cont_num',  "orderable": false
                 },
-                {'data': 'real_weight'
+                {'data': 'real_weight',  "orderable": false
                 },
-                {'data': 'volume_weight'
+                {'data': 'volume_weight',  "orderable": false
                 },
-                {'data': 'billing_weight'
+                {'data': 'billing_weight',  "orderable": false
                 },
-                {'data': 'fare'
+                {'data': 'fare',  "orderable": false
                 },
-                {'data': 'declared_value'
+                {'data': 'declared_value',  "orderable": false
                 },
             ],
             "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull)            {                    //列样式处理

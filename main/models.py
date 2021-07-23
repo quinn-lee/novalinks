@@ -5,6 +5,7 @@ from pymodm import connect, fields, MongoModel, EmbeddedMongoModel
 from pymongo.operations import IndexModel
 from config import Config
 import os
+from pymongo import ASCENDING
 
 connect(Config.MONGODB_URI)
 
@@ -154,6 +155,9 @@ class Waybill(MongoModel):
             IndexModel([('w_no', 1)], unique=True)
         ]
 
+    def tracking_infos(self):
+        return TrackingInfo.objects.raw({'waybill': self._id}).order_by([('event_time', ASCENDING)])
+
     def to_json(self):
         return {
             'id': str(self._id),
@@ -181,6 +185,7 @@ class Waybill(MongoModel):
             'depot_status': {0: '未入仓', 1: '已入仓'}.get(self.depot_status, ""),
             'ds_code': self.depot_status,
             'pod': str(self._id) if self.pod is not None else None,
+            'tracking_infos': [ti.to_json() for ti in self.tracking_infos()]
         }
 
     def lading_bill_ext(self):
@@ -215,6 +220,14 @@ class TrackingInfo(MongoModel):
     description = fields.CharField(blank=True)
     location = fields.CharField(blank=True)
     event_time = fields.DateTimeField(default=datetime.datetime.now)
+
+    def to_json(self):
+        return {
+            'event': self.event,
+            'location': self.location,
+            'description': self.description,
+            'event_time': self.event_time.strftime("%Y/%m/%d %H:%M")
+        }
 
 
 # 登录日志
