@@ -34,6 +34,24 @@ def show_billing():
     return jsonify(errno=RET.OK, data=url)
 
 
+@api.route("/waybills/delete_billing", methods=["GET"])
+def delete_billing():
+    waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
+    if waybill is None:
+        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+
+    try:
+        waybill.lading_bill = None
+        waybill.lading_bill_name = None
+
+        waybill.save()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmag="数据库异常")
+
+    return jsonify(errno=RET.OK)
+
+
 @api.route("/waybills/operator/index", methods=["GET"])
 def waybill_index():
     current_email = session.get("email")
@@ -150,18 +168,62 @@ def waybill_update():
     try:
         if delivery_time is not None and delivery_time != "":
             waybill.delivery_time = datetime.datetime.strptime(delivery_time, '%Y/%m/%d')
+        else:
+            waybill.delivery_time = None
         if etd is not None and etd != "":
             waybill.etd = datetime.datetime.strptime(etd, '%Y/%m/%d')
+        else:
+            waybill.etd = None
         if eta is not None and eta != "":
             waybill.eta = datetime.datetime.strptime(eta, '%Y/%m/%d')
+        else:
+            waybill.eta = None
         if billing_weight is not None and billing_weight != "":
             waybill.billing_weight = billing_weight
+        else:
+            waybill.billing_weight = None
         if customs_apply is not None and customs_apply != "":
             waybill.customs_apply = customs_apply
+        else:
+            waybill.customs_apply = None
         if customs_declaration is not None and customs_declaration != "":
             waybill.customs_declaration = customs_declaration
+        else:
+            waybill.customs_declaration = None
         if agent_info is not None and agent_info != "":
             waybill.agent_info = agent_info
+        else:
+            waybill.agent_info = None
+        waybill.save()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmag="数据库异常")
+
+    return jsonify(errno=RET.OK, errmsg="运单修改成功")
+
+
+@api.route("/waybills/upload_lading_bill", methods=["POST"])
+def waybill_upload_lading_bill():
+    """operator 上传提单
+        参数： w_no, lading_bill
+        """
+    # 获取参数
+    waybill_id = request.form.get('id')
+
+    lading_bill = request.files.get('lading_bill')
+
+    if waybill_id is None or waybill_id == "":
+        return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
+
+    waybill = Waybill.objects.raw({'_id': ObjectId(waybill_id)}).first()
+    if waybill is None:
+        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+
+    # 保存记录
+    try:
+        if lading_bill is not None:
+            waybill.lading_bill = lading_bill
+            waybill.lading_bill_name = secure_filename(lading_bill.filename)
         waybill.save()
     except Exception as e:
         current_app.logger.error(e)

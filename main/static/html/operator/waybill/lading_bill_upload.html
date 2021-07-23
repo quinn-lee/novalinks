@@ -87,86 +87,45 @@
       <div class="main-panel">
         <div class="content-wrapper">
           <div class="row">
+
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card">
-                <div class="card-body dashboard-tabs p-0">
-                  <ul class="nav nav-tabs px-4" role="tablist">
-                    <li class="nav-item">
-                      <a class="nav-link active" href="/operator/waybill/waybills.html" role="tab">所有</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="/operator/waybill/applied.html" role="tab" >已报关</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="/operator/waybill/cleared.html" role="tab" >已清关</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="/operator/waybill/depoted.html" role="tab" >已入仓</a>
-                    </li>
-                  </ul>
-                  <div class="col-lg-12 stretch-card" style="padding-left: 0px; padding-right: 0px;">
-                    <div class="card">
-                      <div class="card-body">
-                        <form class="form-sample" id='search-form'>
-                        <div class="alert alert-danger" role="alert" id="notice" style="display: none;"></div>
-                        <div class="row">
-                          <div class="col-md-4">
-                            <div class="row">
-                              <label class="col-sm-3 col-form-label">运单号：</label>
-                              <div class="col-sm-9">
-                                <input type="text" class="form-control" name="w_no" id="w_no" />
-                              </div>
+                <div class="card-body">
+                  <h4 class="card-title">修改运单</h4>
+                  <p class="card-description">
+                      运单号：<span id="w_no_show"></span>
+                  </p>
+                  <form class="forms-sample" id="upload_lading_bill">
+                    <div class="alert alert-danger" role="alert" id="notice" style="display: none;"></div>
+                    <div class="row">
+                      <input type="hidden" class="form-control" name="waybill_id" id="waybill_id"/>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">货运提单：</label>
+                          <div class="col-sm-9">
+                            <input type="file" name="lading_bill[]" class="file-upload-default" id="lading_bill">
+                            <div class="input-group col-xs-12">
+                              <input type="text" class="form-control file-upload-info" disabled placeholder="Upload File">
+                              <span class="input-group-append">
+                                <button class="file-upload-browse btn btn-primary" type="button" id="click_upload">Upload</button>
+                              </span>
                             </div>
                           </div>
-                          <div class="col-md-4">
-                              <div class="form-group row">
-                                <button type="submit" class="btn btn-primary mr-2">搜索</button>
-                              </div>
-                            </div>
                         </div>
-                        </form>
                       </div>
-                    </div>
-                  </div>
 
-                  <div class="col-lg-12 grid-margin stretch-card" style="padding-left: 0px; padding-right: 0px;">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="table-responsive">
-                          <table class="table table-striped" id="table_details">
-                            <thead>
-                              <tr>
-                                <th></th>
-                                <th>运单号</th>
-                                <th>卖家</th>
-                                <th>收件人</th>
-                                <th>报关</th>
-                                <th>货运提单</th>
-                                <th>物流轨迹</th>
-                                <th>交货时间</th>
-                                <th>ETD</th>
-                                <th>ETA</th>
-                                <th>清关</th>
-                                <th>入仓情况</th>
-                                <th>箱数</th>
-                                <th>实重</th>
-                                <th>材重</th>
-                                <th>收费重</th>
-                                <th>费用</th>
-                                <th>申报价值</th>
-                              </tr>
-                            </thead>
-                            <tbody id='table-tr'>
-                            </tbody>
-                          </table>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group row">
+                          <button type="submit" class="btn btn-primary mr-2">上传</button>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
 
@@ -200,7 +159,8 @@
   <script src="/static/js/data-table.js"></script>
   <script src="/static/js/jquery.dataTables.js"></script>
   <script src="/static/js/dataTables.bootstrap4.js"></script>
-  <script src="/static/js/main/operator/waybill_index.js"></script>
+  <script src="/static/js/file-upload.js"></script>
+  <script src="/static/js/main/operator/lading_bill_upload.js"></script>
   <script src="/static/js/main/session.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
@@ -208,12 +168,3 @@
 </body>
 
 </html>
-
-<style>
-  .dataTables_wrapper .dataTable tbody tr td {
-    font-size: 12px;
-  }
-  .table thead th {
-    font-size: 12px;
-  }
-</style>

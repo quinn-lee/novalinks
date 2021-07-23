@@ -33,6 +33,26 @@ function show_billing(obj) {
     });
 }
 
+function delete_billing(obj) {
+    $.ajax({
+        url:"/api/v1.0/waybills/delete_billing?id="+obj.id.split("_")[1],
+        type:"get",
+        contentType: "application/json",
+        dataType: "json",
+        headers:{
+            "X-CSRFToken":getCookie("csrf_token")
+        },
+        success: function (resp) {
+            if (resp.errno == "0") {
+                location.href = "/operator/waybill/waybills.html"
+            }
+            else {
+                alert(resp.errmsg);
+            }
+        }
+    });
+}
+
 $(document).ready(function() {
 
     var queryData = decodeQuery();
@@ -127,9 +147,9 @@ $(document).ready(function() {
             },
             "columns": [
                 //跟你要显示的字段是一一对应的。
-                {'data': 'id',  "orderable": false,
+                {'data': null,  "orderable": false,
                     render: function (data, type, full) {
-                         return "<a href='/operator/waybill/edit.html?id="+ data + "'>编辑" + "</a>";
+                         return "<a href='/operator/waybill/edit.html?id="+ data.id + "'>修改" + "</a>";
                     }
                 },
                 {'data': 'w_no'
@@ -140,10 +160,12 @@ $(document).ready(function() {
                 },
                 {'data': 'customs_apply'
                 },
-                {'data': 'lading_bill',  "orderable": false,
+                {'data': null,  "orderable": false,
                     render: function (data, type, full) {
-                        if(data != null){
-                            return "<a href='#' id='billing_"+ data + "' onclick=show_billing(this);>查看" + "</a>";
+                        if(data.lading_bill != null){
+                            return "<a href='#' id='billing_"+ data.id + "' onclick=show_billing(this);>查看" + "</a>&nbsp;&nbsp;<a href='#' id='delbilling_"+ data.id + "' onclick=delete_billing(this);>删除" + "</a>";
+                        } else {
+                            return "<a href='/operator/waybill/lading_bill_upload.html?id="+ data.id + "'>上传" + "</a>";
                         }
                     }
                 },

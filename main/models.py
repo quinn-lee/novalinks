@@ -127,26 +127,26 @@ class Depot(MongoModel):
 class Waybill(MongoModel):
     w_no = fields.CharField()  # 运单号（预报号）
     seller = fields.ReferenceField(User)  # 用户（卖家名）
-    wms_user = fields.CharField()  # wms用户名
+    wms_user = fields.CharField(blank=True)  # wms用户名
     operator = fields.ReferenceField(User)  # 服务商（操作员）
     depot = fields.ReferenceField(Depot)  # 收件人（地址代号）
-    wms_info = fields.DictField()  # wms同步过来的信息
-    cont_num = fields.IntegerField()  # 箱数，与WMS同步
-    real_weight = fields.FloatField()  # 实重，与WMS同步
-    volume_weight = fields.FloatField()  # 材重，与WMS同步
-    billing_weight = fields.FloatField()  # 收费重，操作员填写
-    fare = fields.FloatField()  # 费用，计算
-    declared_value = fields.FloatField()  # 申报价值，wms备案换算
-    customs_apply = fields.IntegerField()  # 报关情况，0-未报关，1-已报关，由操作员填写
-    lading_bill = fields.FileField()  # 货运提单，由操作员上传
-    lading_bill_name = fields.CharField()
-    delivery_time = fields.DateTimeField()  # 交货时间，工厂装柜日期，操作员填写
-    etd = fields.DateTimeField()  # 出运时间，国际运输物流的ETD，操作员填写
-    eta = fields.DateTimeField()  # 到港时间，国际运输物流的ETA，操作员填写
-    customs_declaration = fields.IntegerField()  # 清关情况，0-未清关，1-已清关（点击可查看海外代理信息），由操作员填写
-    agent_info = fields.CharField()  # 海外代理信息，点击清关情况时可以查看
-    depot_status = fields.IntegerField()  # 0-未入仓，1-已入仓（点击可查看POD，操作员上传）
-    pod = fields.FileField()  # pod文件
+    wms_info = fields.DictField(blank=True)  # wms同步过来的信息
+    cont_num = fields.IntegerField(blank=True)  # 箱数，与WMS同步
+    real_weight = fields.FloatField(blank=True)  # 实重，与WMS同步
+    volume_weight = fields.FloatField(blank=True)  # 材重，与WMS同步
+    billing_weight = fields.FloatField(blank=True)  # 收费重，操作员填写
+    fare = fields.FloatField(blank=True)  # 费用，计算
+    declared_value = fields.FloatField(blank=True)  # 申报价值，wms备案换算
+    customs_apply = fields.IntegerField(blank=True)  # 报关情况，0-未报关，1-已报关，由操作员填写
+    lading_bill = fields.FileField(blank=True)  # 货运提单，由操作员上传
+    lading_bill_name = fields.CharField(blank=True)
+    delivery_time = fields.DateTimeField(blank=True)  # 交货时间，工厂装柜日期，操作员填写
+    etd = fields.DateTimeField(blank=True)  # 出运时间，国际运输物流的ETD，操作员填写
+    eta = fields.DateTimeField(blank=True)  # 到港时间，国际运输物流的ETA，操作员填写
+    customs_declaration = fields.IntegerField(blank=True)  # 清关情况，0-未清关，1-已清关（点击可查看海外代理信息），由操作员填写
+    agent_info = fields.CharField(blank=True)  # 海外代理信息，点击清关情况时可以查看
+    depot_status = fields.IntegerField(blank=True)  # 0-未入仓，1-已入仓（点击可查看POD，操作员上传）
+    pod = fields.FileField(blank=True)  # pod文件
 
     class Meta:
         indexes = [
