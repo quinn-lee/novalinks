@@ -171,11 +171,11 @@ def waybill_create():
             waybill.lading_bill = lading_bill
             waybill.lading_bill_name = secure_filename(lading_bill.filename)
         if delivery_time is not None and delivery_time != "":
-            waybill.delivery_time = datetime.datetime.strptime(delivery_time, '%Y/%m/%d')
+            waybill.delivery_time = datetime.datetime.strptime(delivery_time, '%Y/%m/%d %H:%M')
         if etd is not None and etd != "":
-            waybill.etd = datetime.datetime.strptime(etd, '%Y/%m/%d')
+            waybill.etd = datetime.datetime.strptime(etd, '%Y/%m/%d %H:%M')
         if eta is not None and eta != "":
-            waybill.eta = datetime.datetime.strptime(eta, '%Y/%m/%d')
+            waybill.eta = datetime.datetime.strptime(eta, '%Y/%m/%d %H:%M')
         if billing_weight is not None and billing_weight != "":
             waybill.billing_weight = billing_weight
         if customs_apply is not None and customs_apply != "":
@@ -215,15 +215,15 @@ def waybill_update():
     # 保存记录
     try:
         if delivery_time is not None and delivery_time != "":
-            waybill.delivery_time = datetime.datetime.strptime(delivery_time, '%Y/%m/%d')
+            waybill.delivery_time = datetime.datetime.strptime(delivery_time, '%Y/%m/%d %H:%M')
         else:
             waybill.delivery_time = None
         if etd is not None and etd != "":
-            waybill.etd = datetime.datetime.strptime(etd, '%Y/%m/%d')
+            waybill.etd = datetime.datetime.strptime(etd, '%Y/%m/%d %H:%M')
         else:
             waybill.etd = None
         if eta is not None and eta != "":
-            waybill.eta = datetime.datetime.strptime(eta, '%Y/%m/%d')
+            waybill.eta = datetime.datetime.strptime(eta, '%Y/%m/%d %H:%M')
         else:
             waybill.eta = None
         if billing_weight is not None and billing_weight != "":
@@ -334,7 +334,7 @@ def tracking_info_create():
 
     # 保存记录
     try:
-        tracking_info = TrackingInfo(waybill=waybill, event_time=datetime.datetime.strptime(event_time, '%Y/%m/%d'),
+        tracking_info = TrackingInfo(waybill=waybill, event_time=datetime.datetime.strptime(event_time, '%Y/%m/%d %H:%M'),
                                      event=event, location=location, description=description)
         tracking_info.save()
     except Exception as e:

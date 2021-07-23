@@ -58,8 +58,8 @@ $(document).ready(function() {
            ]
           }
          },
-         timepicker:false,
-         format:'Y/m/d'
+         timepicker:true,
+         format:'Y/m/d H:i'
     });
 
     $("#edit_waybill").submit(function(e){

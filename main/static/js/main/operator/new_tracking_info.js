@@ -51,8 +51,8 @@ $(document).ready(function() {
            ]
           }
          },
-         timepicker:false,
-         format:'Y/m/d'
+         timepicker:true,
+         format:'Y/m/d H:i'
     });
     $("#event_time").focus(function(){
         $("#notice").hide();

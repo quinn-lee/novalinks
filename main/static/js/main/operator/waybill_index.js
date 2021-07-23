@@ -235,7 +235,7 @@ $(document).ready(function() {
                 {'data': null,  "orderable": false,
                     render: function (data, type, full) {
                         if(data.lading_bill != null){
-                            return "<a title='查看提单' href='#' id='billing_"+ data.id + "' onclick=show_billing(this);><i class='mdi mdi-file-find text-success'></i>" + "</a>&nbsp;&nbsp;<a title='删除提单' href='#' id='delbilling_"+ data.id + "' onclick=delete_billing(this);><i class='mdi mdi-delete-forever text-danger'></i>" + "</a>";
+                            return "<a title='查看提单' href='#' id='billing_"+ data.id + "' onclick=show_billing(this);><i class='mdi mdi-download text-success'></i>" + "</a>&nbsp;&nbsp;<a title='删除提单' href='#' id='delbilling_"+ data.id + "' onclick=delete_billing(this);><i class='mdi mdi-delete-forever text-danger'></i>" + "</a>";
                         } else {
                             return "<a title='上传提单' href='/operator/waybill/lading_bill_upload.html?id="+ data.id + "'><i class='mdi mdi-upload text-success'></i>" + "</a>";
                         }
@@ -258,7 +258,7 @@ $(document).ready(function() {
                 {'data': null,  "orderable": false,
                     render: function (data, type, full) {
                         if(data.pod != null){
-                            return data.depot_status+"&nbsp;<a title='查看POD' href='#' id='pod_"+ data.id + "' onclick=show_pod(this);><i class='mdi mdi-file-find text-success'></i>POD" + "</a>&nbsp;&nbsp;<a title='删除POD' href='#' id='delpod_"+ data.id + "' onclick=delete_pod(this);><i class='mdi mdi-delete-forever text-danger'></i>POD" + "</a>";
+                            return data.depot_status+"&nbsp;<a title='查看POD' href='#' id='pod_"+ data.id + "' onclick=show_pod(this);><i class='mdi mdi-download text-success'></i>POD" + "</a>&nbsp;&nbsp;<a title='删除POD' href='#' id='delpod_"+ data.id + "' onclick=delete_pod(this);><i class='mdi mdi-delete-forever text-danger'></i>POD" + "</a>";
                         } else {
                             return data.depot_status+"&nbsp;<a title='上传POD' href='/operator/waybill/pod_upload.html?id="+ data.id + "'><i class='mdi mdi-upload text-success'></i>POD" + "</a>";
                         }

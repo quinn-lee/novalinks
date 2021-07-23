@@ -20,8 +20,8 @@ $(document).ready(function() {
            ]
           }
          },
-         timepicker:false,
-         format:'Y/m/d'
+         timepicker:true,
+         format:'Y/m/d H:i'
     });
 
     $.get("/api/v1.0/authorizations/authorized", function (resp) {
