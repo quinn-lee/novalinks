@@ -34,8 +34,36 @@ function show_billing(obj) {
 }
 
 function delete_billing(obj) {
+    conf = confirm("确认要删除该运单吗？");
+    if (conf == false) {
+        return
+    }
     $.ajax({
         url:"/api/v1.0/waybills/delete_billing?id="+obj.id.split("_")[1],
+        type:"get",
+        contentType: "application/json",
+        dataType: "json",
+        headers:{
+            "X-CSRFToken":getCookie("csrf_token")
+        },
+        success: function (resp) {
+            if (resp.errno == "0") {
+                location.href = "/operator/waybill/waybills.html"
+            }
+            else {
+                alert(resp.errmsg);
+            }
+        }
+    });
+}
+
+function delete_waybill(obj) {
+    conf = confirm("确认要删除该运单吗？");
+    if (conf == false) {
+        return
+    }
+    $.ajax({
+        url:"/api/v1.0/waybills/delete?id="+obj.id.split("_")[1],
         type:"get",
         contentType: "application/json",
         dataType: "json",
@@ -149,7 +177,7 @@ $(document).ready(function() {
                 //跟你要显示的字段是一一对应的。
                 {'data': null,  "orderable": false,
                     render: function (data, type, full) {
-                         return "<a href='/operator/waybill/edit.html?id="+ data.id + "'>修改" + "</a>";
+                         return "<a href='/operator/waybill/edit.html?id="+ data.id + "'>修改" + "</a>&nbsp;&nbsp;<a href='#' id='delwaybill_"+ data.id + "' onclick=delete_waybill(this);>删除" + "</a>";
                     }
                 },
                 {'data': 'w_no'

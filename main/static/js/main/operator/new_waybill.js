@@ -104,7 +104,7 @@ $(document).ready(function() {
             success: function (data) {
                 if (data.errno == "0") {
                     // 创建成功，跳转到列表页
-                    location.href = "/operator/waybill/index.html";
+                    location.href = "/operator/waybill/waybills.html";
                 }
                 else {
                     // 其他错误信息，在页面中展示

@@ -20,7 +20,7 @@
     + Color Functions Mixins
     + Badge Mixins
     + Blockquote Mixins
-    
+
   * Core Styles
     + Reset Styles
     + Fonts
@@ -43,7 +43,7 @@
     + Lists
     + Tables
   * Plugin overrides
-    + Data-tables  
+    + Data-tables
   * Landing screens
     + Auth
   * Layout
@@ -21329,7 +21329,7 @@ dl li {
 }
 
 .sidebar .nav.sub-menu .nav-item .nav-link.active {
-  color: #000;
+  color: #4d83ff;
   background: transparent;
 }
 

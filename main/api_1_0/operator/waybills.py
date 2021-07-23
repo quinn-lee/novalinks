@@ -52,6 +52,20 @@ def delete_billing():
     return jsonify(errno=RET.OK)
 
 
+@api.route("/waybills/delete", methods=["GET"])
+def delete_waybill():
+    waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
+
+    try:
+        if waybill is not None:
+            waybill.delete()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmag="数据库异常")
+
+    return jsonify(errno=RET.OK)
+
+
 @api.route("/waybills/operator/index", methods=["GET"])
 def waybill_index():
     current_email = session.get("email")
