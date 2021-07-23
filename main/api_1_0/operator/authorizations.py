@@ -9,51 +9,63 @@ from main.utils.response_code import RET
 @api.route("/authorizations/unauthorized_users", methods=["GET"])
 def query_unauthorized_users():
     """operator 查询未经自己授权的用户"""
-    users = User.objects.raw({'role': 'seller'})
-    current_email = session.get("email")
-    if current_email is None:
-        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
-    from_user = User.objects.raw({'email': current_email}).first()
-    if from_user is None:
-        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
-    auths = Authorization.objects.raw({'from_user': from_user._id, 'status': {'$ne': 2}})
-    users = users.raw({'_id': {'$nin': [auth.to_user._id for auth in auths]}})
-    data = [{'email': user.email, 'name': user.name} for user in users]
-    data.insert(0, {'email': '', 'name': ''})
-    current_app.logger.info(data)
-    return jsonify(errno='0', data=data)
+    try:
+        users = User.objects.raw({'role': 'seller'})
+        current_email = session.get("email")
+        if current_email is None:
+            return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+        from_user = User.objects.raw({'email': current_email}).first()
+        if from_user is None:
+            return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+        auths = Authorization.objects.raw({'from_user': from_user._id, 'status': {'$ne': 2}})
+        users = users.raw({'_id': {'$nin': [auth.to_user._id for auth in auths]}})
+        data = [{'email': user.email, 'name': user.name} for user in users]
+        data.insert(0, {'email': '', 'name': ''})
+        current_app.logger.info(data)
+        return jsonify(errno='0', data=data)
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
 
 @api.route("/authorizations/authorized", methods=["GET"])
 def query_authorized_users():
     """operator 查询已授权的用户"""
-    current_email = session.get("email")
-    if current_email is None:
-        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
-    from_user = User.objects.raw({'email': current_email}).first()
-    if from_user is None:
-        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
-    auths = Authorization.objects.raw({'from_user': from_user._id, 'status': 1})
-    data = [auth.to_operator_json() for auth in auths]
-    data.insert(0, {'email': '', 'name': ''})
-    current_app.logger.info(data)
-    return jsonify(errno='0', data=data)
+    try:
+        current_email = session.get("email")
+        if current_email is None:
+            return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+        from_user = User.objects.raw({'email': current_email}).first()
+        if from_user is None:
+            return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+        auths = Authorization.objects.raw({'from_user': from_user._id, 'status': 1})
+        data = [auth.to_operator_json() for auth in auths]
+        data.insert(0, {'email': '', 'name': ''})
+        current_app.logger.info(data)
+        return jsonify(errno='0', data=data)
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
 
 @api.route("/authorizations/requests", methods=["GET"])
 def query_authorization_requests():
     """operator 查询请求授权过的用户"""
-    current_email = session.get("email")
-    if current_email is None:
-        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
-    from_user = User.objects.raw({'email': current_email}).first()
-    if from_user is None:
-        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
-    auths = Authorization.objects.raw({'from_user': from_user._id})
+    try:
+        current_email = session.get("email")
+        if current_email is None:
+            return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+        from_user = User.objects.raw({'email': current_email}).first()
+        if from_user is None:
+            return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+        auths = Authorization.objects.raw({'from_user': from_user._id})
 
-    data = [auth.to_operator_json() for auth in auths]
-    current_app.logger.info(data)
-    return jsonify(errno='0', data=data)
+        data = [auth.to_operator_json() for auth in auths]
+        current_app.logger.info(data)
+        return jsonify(errno='0', data=data)
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
 
 @api.route("/authorizations/request", methods=["POST"])
@@ -67,29 +79,33 @@ def authorization_request():
         current_app.logger.info("request_json: {}".format(request.get_json()))
         req_dict = request.get_json()
     except Exception as e:
-        current_app.logger.info(e)
+        current_app.logger.error(e)
         return jsonify(errno=RET.NOTJSON, errmsg="参数非Json格式")
-    if req_dict is None:
-        return jsonify(errno=RET.NOTJSON, errmsg="参数非Json格式")
-    email = req_dict.get("email")
+    try:
+        if req_dict is None:
+            return jsonify(errno=RET.NOTJSON, errmsg="参数非Json格式")
+        email = req_dict.get("email")
 
-    # 校验参数
-    # 参数完整的校验
-    if not all([email]):
-        return jsonify(errno=RET.PARAMERR, errmsg="参数不完整")
+        # 校验参数
+        # 参数完整的校验
+        if not all([email]):
+            return jsonify(errno=RET.PARAMERR, errmsg="参数不完整")
 
-    to_user = User.objects.raw({'email': email}).first()
-    if to_user is None:
-        return jsonify(errno=RET.PARAMERR, errmsg="用户不存在")
-    current_email = session.get("email")
-    if current_email is None:
-        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
-    from_user = User.objects.raw({'email': current_email}).first()
-    if from_user is None:
-        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+        to_user = User.objects.raw({'email': email}).first()
+        if to_user is None:
+            return jsonify(errno=RET.PARAMERR, errmsg="用户不存在")
+        current_email = session.get("email")
+        if current_email is None:
+            return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+        from_user = User.objects.raw({'email': current_email}).first()
+        if from_user is None:
+            return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
 
-    if Authorization.objects.raw({'from_user': from_user._id, 'to_user': to_user._id, 'status': {'$ne': 2}}).count() > 0:
-        return jsonify(errno=RET.PARAMERR, errmsg="该用户已有授权请求记录，不能重复请求授权！")
+        if Authorization.objects.raw({'from_user': from_user._id, 'to_user': to_user._id, 'status': {'$ne': 2}}).count() > 0:
+            return jsonify(errno=RET.PARAMERR, errmsg="该用户已有授权请求记录，不能重复请求授权！")
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
     # 保存记录
     try:

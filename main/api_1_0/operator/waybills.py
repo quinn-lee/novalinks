@@ -11,34 +11,46 @@ import datetime
 
 @api.route("/waybills/edit", methods=["GET"])
 def waybill_edit():
-    waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
-    if waybill is None:
-        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+    try:
+        waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
+        if waybill is None:
+            return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
 
-    return jsonify(errno=RET.OK, data=waybill.to_json())
+        return jsonify(errno=RET.OK, data=waybill.to_json())
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
 
 @api.route("/waybills/show_billing", methods=["GET"])
 def show_billing():
-    waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
-    if waybill is None:
-        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
-    if waybill.lading_bill is None:
-        return jsonify(errno=RET.DBERR, errmsg="运单的提单文件不存在！")
+    try:
+        waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
+        if waybill is None:
+            return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+        if waybill.lading_bill is None:
+            return jsonify(errno=RET.DBERR, errmsg="运单的提单文件不存在！")
 
-    f = waybill.lading_bill.file
-    url = "/files/lading_bills/{}.{}".format(str(waybill._id), waybill.lading_bill_ext())
-    with open("main/static/html{}".format(url), 'wb') as file:
-        file.write(f.read())
+        f = waybill.lading_bill.file
+        url = "/files/lading_bills/{}.{}".format(str(waybill._id), waybill.lading_bill_ext())
+        with open("main/static/html{}".format(url), 'wb') as file:
+            file.write(f.read())
 
-    return jsonify(errno=RET.OK, data=url)
+        return jsonify(errno=RET.OK, data=url)
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
 
 @api.route("/waybills/delete_billing", methods=["GET"])
 def delete_billing():
-    waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
-    if waybill is None:
-        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+    try:
+        waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
+        if waybill is None:
+            return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
     try:
         waybill.lading_bill = None
@@ -54,25 +66,33 @@ def delete_billing():
 
 @api.route("/waybills/show_pod", methods=["GET"])
 def show_pod():
-    waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
-    if waybill is None:
-        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
-    if waybill.pod is None:
-        return jsonify(errno=RET.DBERR, errmsg="运单的提单文件不存在！")
+    try:
+        waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
+        if waybill is None:
+            return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+        if waybill.pod is None:
+            return jsonify(errno=RET.DBERR, errmsg="运单的提单文件不存在！")
 
-    f = waybill.pod.file
-    url = "/files/pods/{}.{}".format(str(waybill._id), waybill.pod_ext())
-    with open("main/static/html{}".format(url), 'wb') as file:
-        file.write(f.read())
+        f = waybill.pod.file
+        url = "/files/pods/{}.{}".format(str(waybill._id), waybill.pod_ext())
+        with open("main/static/html{}".format(url), 'wb') as file:
+            file.write(f.read())
 
-    return jsonify(errno=RET.OK, data=url)
+        return jsonify(errno=RET.OK, data=url)
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
 
 @api.route("/waybills/delete_pod", methods=["GET"])
 def delete_pod():
-    waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
-    if waybill is None:
-        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+    try:
+        waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
+        if waybill is None:
+            return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
     try:
         waybill.pod = None
@@ -88,7 +108,11 @@ def delete_pod():
 
 @api.route("/waybills/delete", methods=["GET"])
 def delete_waybill():
-    waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
+    try:
+        waybill = Waybill.objects.raw({'_id': ObjectId(request.args.get('id'))}).first()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
     try:
         if waybill is not None:
@@ -102,24 +126,28 @@ def delete_waybill():
 
 @api.route("/waybills/operator/index", methods=["GET"])
 def waybill_index():
-    current_email = session.get("email")
-    if current_email is None:
-        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
-    operator = User.objects.raw({'email': current_email}).first()
-    if operator is None:
-        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+    try:
+        current_email = session.get("email")
+        if current_email is None:
+            return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+        operator = User.objects.raw({'email': current_email}).first()
+        if operator is None:
+            return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
 
-    waybills = Waybill.objects.raw({'operator': operator._id})
-    if request.args.get('w_no') is not None and request.args.get('w_no') != '':
-        waybills = waybills.raw({'w_no': request.args.get('w_no')})
-    if request.args.get('customs_apply') is not None and request.args.get('customs_apply') != '':
-        waybills = waybills.raw({'customs_apply': request.args.get('customs_apply')})
-    if request.args.get('customs_declaration') is not None and request.args.get('customs_declaration') != '':
-        waybills = waybills.raw({'customs_declaration': request.args.get('customs_declaration')})
-    if request.args.get('depot_status') is not None and request.args.get('depot_status') != '':
-        waybills = waybills.raw({'depot_status': request.args.get('depot_status')})
+        waybills = Waybill.objects.raw({'operator': operator._id})
+        if request.args.get('w_no') is not None and request.args.get('w_no') != '':
+            waybills = waybills.raw({'w_no': request.args.get('w_no')})
+        if request.args.get('customs_apply') is not None and request.args.get('customs_apply') != '':
+            waybills = waybills.raw({'customs_apply': request.args.get('customs_apply')})
+        if request.args.get('customs_declaration') is not None and request.args.get('customs_declaration') != '':
+            waybills = waybills.raw({'customs_declaration': request.args.get('customs_declaration')})
+        if request.args.get('depot_status') is not None and request.args.get('depot_status') != '':
+            waybills = waybills.raw({'depot_status': request.args.get('depot_status')})
 
-    return jsonify(errno=RET.OK, data=[waybill.to_json() for waybill in waybills], totalRows=waybills.count())
+        return jsonify(errno=RET.OK, data=[waybill.to_json() for waybill in waybills], totalRows=waybills.count())
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
 
 @api.route("/waybills/create", methods=["POST"])
@@ -128,41 +156,45 @@ def waybill_create():
         参数： w_no, seller_email, depot_id
         """
     # 获取参数
-    seller_email = request.form.get("seller_email")
-    w_no = request.form.get('w_no')
-    depot_id = request.form.get('depot_id')
-    lading_bill = request.files.get('lading_bill')
-    billing_weight = request.form.get('billing_weight')
-    customs_apply = request.form.get('customs_apply')
-    delivery_time = request.form.get('delivery_time')
-    customs_declaration = request.form.get('customs_declaration')
-    etd = request.form.get('etd')
-    eta = request.form.get('eta')
+    try:
+        seller_email = request.form.get("seller_email")
+        w_no = request.form.get('w_no')
+        depot_id = request.form.get('depot_id')
+        lading_bill = request.files.get('lading_bill')
+        billing_weight = request.form.get('billing_weight')
+        customs_apply = request.form.get('customs_apply')
+        delivery_time = request.form.get('delivery_time')
+        customs_declaration = request.form.get('customs_declaration')
+        etd = request.form.get('etd')
+        eta = request.form.get('eta')
 
-    # 校验参数
-    # 参数完整的校验
-    if not all([seller_email, w_no, depot_id]):
-        return jsonify(errno=RET.PARAMERR, errmsg="参数不完整")
+        # 校验参数
+        # 参数完整的校验
+        if not all([seller_email, w_no, depot_id]):
+            return jsonify(errno=RET.PARAMERR, errmsg="参数不完整")
 
-    seller = User.objects.raw({'email': seller_email}).first()
-    if seller is None:
-        return jsonify(errno=RET.PARAMERR, errmsg="用户不存在")
-    current_email = session.get("email")
-    if current_email is None:
-        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
-    operator = User.objects.raw({'email': current_email}).first()
-    if operator is None:
-        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+        seller = User.objects.raw({'email': seller_email}).first()
+        if seller is None:
+            return jsonify(errno=RET.PARAMERR, errmsg="用户不存在")
+        current_email = session.get("email")
+        if current_email is None:
+            return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+        operator = User.objects.raw({'email': current_email}).first()
+        if operator is None:
+            return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
 
-    if Authorization.objects.raw({'from_user': operator._id, 'to_user': seller._id, 'status': 1}).count() == 0:
-        return jsonify(errno=RET.PARAMERR, errmsg="授权记录已删除，您无权登记该用户的运单！")
+        if Authorization.objects.raw({'from_user': operator._id, 'to_user': seller._id, 'status': 1}).count() == 0:
+            return jsonify(errno=RET.PARAMERR, errmsg="授权记录已删除，您无权登记该用户的运单！")
 
-    depot = Depot.objects.raw({'_id': ObjectId(depot_id)}).first()
-    if depot is None:
-        return jsonify(errno=RET.PARAMERR, errmsg="仓库不存在")
+        depot = Depot.objects.raw({'_id': ObjectId(depot_id)}).first()
+        if depot is None:
+            return jsonify(errno=RET.PARAMERR, errmsg="仓库不存在")
 
-    if Waybill.objects.raw({'w_no': w_no}).count() > 0:
-        return jsonify(errno=RET.PARAMERR, errmsg="该运单号（预报号）已存在")
+        if Waybill.objects.raw({'w_no': w_no}).count() > 0:
+            return jsonify(errno=RET.PARAMERR, errmsg="该运单号（预报号）已存在")
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
     # 保存记录
     try:
@@ -196,21 +228,25 @@ def waybill_update():
         参数： w_no, seller_email, depot_id
         """
     # 获取参数
-    billing_weight = request.form.get('billing_weight')
-    customs_apply = request.form.get('customs_apply')
-    delivery_time = request.form.get('delivery_time')
-    customs_declaration = request.form.get('customs_declaration')
-    etd = request.form.get('etd')
-    eta = request.form.get('eta')
-    waybill_id = request.form.get('id')
-    agent_info = request.form.get('agent_info')
+    try:
+        billing_weight = request.form.get('billing_weight')
+        customs_apply = request.form.get('customs_apply')
+        delivery_time = request.form.get('delivery_time')
+        customs_declaration = request.form.get('customs_declaration')
+        etd = request.form.get('etd')
+        eta = request.form.get('eta')
+        waybill_id = request.form.get('id')
+        agent_info = request.form.get('agent_info')
 
-    if waybill_id is None or waybill_id == "":
-        return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
+        if waybill_id is None or waybill_id == "":
+            return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
 
-    waybill = Waybill.objects.raw({'_id': ObjectId(waybill_id)}).first()
-    if waybill is None:
-        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+        waybill = Waybill.objects.raw({'_id': ObjectId(waybill_id)}).first()
+        if waybill is None:
+            return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
     # 保存记录
     try:
@@ -256,16 +292,20 @@ def waybill_upload_lading_bill():
         参数： id, lading_bill
         """
     # 获取参数
-    waybill_id = request.form.get('id')
+    try:
+        waybill_id = request.form.get('id')
 
-    lading_bill = request.files.get('lading_bill')
+        lading_bill = request.files.get('lading_bill')
 
-    if waybill_id is None or waybill_id == "":
-        return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
+        if waybill_id is None or waybill_id == "":
+            return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
 
-    waybill = Waybill.objects.raw({'_id': ObjectId(waybill_id)}).first()
-    if waybill is None:
-        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+        waybill = Waybill.objects.raw({'_id': ObjectId(waybill_id)}).first()
+        if waybill is None:
+            return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
     # 保存记录
     try:
@@ -286,17 +326,21 @@ def waybill_upload_pod():
         参数： id, pod, depot_status
         """
     # 获取参数
-    waybill_id = request.form.get('id')
-    depot_status = request.form.get('depot_status')
+    try:
+        waybill_id = request.form.get('id')
+        depot_status = request.form.get('depot_status')
 
-    pod = request.files.get('pod')
+        pod = request.files.get('pod')
 
-    if waybill_id is None or waybill_id == "":
-        return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
+        if waybill_id is None or waybill_id == "":
+            return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
 
-    waybill = Waybill.objects.raw({'_id': ObjectId(waybill_id)}).first()
-    if waybill is None:
-        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+        waybill = Waybill.objects.raw({'_id': ObjectId(waybill_id)}).first()
+        if waybill is None:
+            return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
     # 保存记录
     try:
@@ -319,18 +363,22 @@ def tracking_info_create():
         参数： id, event_time, location, event, description
         """
     # 获取参数
-    event_time = request.form.get('event_time')
-    location = request.form.get('location')
-    event = request.form.get('event')
-    description = request.form.get('description')
-    waybill_id = request.form.get('id')
+    try:
+        event_time = request.form.get('event_time')
+        location = request.form.get('location')
+        event = request.form.get('event')
+        description = request.form.get('description')
+        waybill_id = request.form.get('id')
 
-    if waybill_id is None or waybill_id == "":
-        return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
+        if waybill_id is None or waybill_id == "":
+            return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
 
-    waybill = Waybill.objects.raw({'_id': ObjectId(waybill_id)}).first()
-    if waybill is None:
-        return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+        waybill = Waybill.objects.raw({'_id': ObjectId(waybill_id)}).first()
+        if waybill is None:
+            return jsonify(errno=RET.DBERR, errmsg="运单不存在！")
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
     # 保存记录
     try:

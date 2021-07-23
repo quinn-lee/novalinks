@@ -28,32 +28,36 @@ def create_user():
         current_app.logger.info("request_json: {}".format(request.get_json()))
         req_dict = request.get_json()
     except Exception as e:
-        current_app.logger.info(e)
+        current_app.logger.error(e)
         return jsonify(errno=RET.NOTJSON, errmsg="参数非Json格式")
-    if req_dict is None:
-        return jsonify(errno=RET.NOTJSON, errmsg="参数非Json格式")
-    email = req_dict.get("email")
-    password = req_dict.get("password")
-    password_confirm = req_dict.get("password_confirm")
-    name = req_dict.get("name")
-    role = req_dict.get("role")
+    try:
+        if req_dict is None:
+            return jsonify(errno=RET.NOTJSON, errmsg="参数非Json格式")
+        email = req_dict.get("email")
+        password = req_dict.get("password")
+        password_confirm = req_dict.get("password_confirm")
+        name = req_dict.get("name")
+        role = req_dict.get("role")
 
-    # 校验参数
-    # 参数完整的校验
-    if not all([email, password, password_confirm, name, role]):
-        return jsonify(errno=RET.PARAMERR, errmsg="参数不完整")
+        # 校验参数
+        # 参数完整的校验
+        if not all([email, password, password_confirm, name, role]):
+            return jsonify(errno=RET.PARAMERR, errmsg="参数不完整")
 
-    # 邮箱的格式
-    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-        return jsonify(errno=RET.PARAMERR, errmsg="邮箱格式错误")
+        # 邮箱的格式
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            return jsonify(errno=RET.PARAMERR, errmsg="邮箱格式错误")
 
-    # 密码与确认密码进行比对
-    if password != password_confirm:
-        current_app.logger.error(password)
-        current_app.logger.error(password_confirm)
-        return jsonify(errno=RET.DATAERR, errmsg="密码与确认密码不一致")
-    if User.objects.raw({'email': email}).count() > 0:
-        return jsonify(errno=RET.DATAERR, errmsg="email重复")
+        # 密码与确认密码进行比对
+        if password != password_confirm:
+            current_app.logger.error(password)
+            current_app.logger.error(password_confirm)
+            return jsonify(errno=RET.DATAERR, errmsg="密码与确认密码不一致")
+        if User.objects.raw({'email': email}).count() > 0:
+            return jsonify(errno=RET.DATAERR, errmsg="email重复")
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
 
     # 保存记录
     try:
@@ -73,7 +77,7 @@ def query_users():
         current_app.logger.info("request_json: {}".format(request.get_json()))
         req_dict = request.get_json()
     except Exception as e:
-        current_app.logger.info(e)
+        current_app.logger.error(e)
         return jsonify(errno=RET.NOTJSON, errmsg="参数非Json格式")
     users = User.objects.raw({'role': {'$ne': 'admin'}})
     if req_dict is not None:
