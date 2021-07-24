@@ -236,7 +236,14 @@ $(document).ready(function() {
                         return "<div class='dropdown'><a class='btn btn-secondary dropdown-toggle p-0 bg-transparent border-0 text-dark shadow-none font-weight-medium' href='#' style='font-size: 12px;' role='button' id='dropdownMenuLinkA' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='mb-0 d-inline-block'>" + data.w_no + "</span></a><div class='dropdown-menu' aria-labelledby='dropdownMenuLinkA'>" + html_str + "</div></div>"
                     }
                 },
-                {'data': 'seller',  "orderable": false
+                {'data': null,  "orderable": false,
+                    render: function (data, type, full) {
+                        if(data.wms_user != null){
+                            return data.seller + "</br>(" + data.wms_user + ")";
+                        } else {
+                            return data.seller;
+                        }
+                    }
                 },
                 {'data': 'depot',  "orderable": false
                 },
