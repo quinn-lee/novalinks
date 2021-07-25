@@ -51,6 +51,9 @@ $(document).ready(function() {
                     } else if ( data.data == "seller" ) {
                         // seller登录成功，跳转到主页
                         location.href = "/seller/waybill/waybills.html";
+                    } else if ( data.data == "inspector" ) {
+                        // seller登录成功，跳转到主页
+                        location.href = "/inspector/waybill/waybills.html";
                     }
                 }
                 else {
