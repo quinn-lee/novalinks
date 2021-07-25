@@ -138,11 +138,11 @@ def waybill_index():
         if request.args.get('w_no') is not None and request.args.get('w_no') != '':
             waybills = waybills.raw({'w_no': request.args.get('w_no')})
         if request.args.get('customs_apply') is not None and request.args.get('customs_apply') != '':
-            waybills = waybills.raw({'customs_apply': request.args.get('customs_apply')})
+            waybills = waybills.raw({'customs_apply': int(request.args.get('customs_apply'))})
         if request.args.get('customs_declaration') is not None and request.args.get('customs_declaration') != '':
-            waybills = waybills.raw({'customs_declaration': request.args.get('customs_declaration')})
+            waybills = waybills.raw({'customs_declaration': int(request.args.get('customs_declaration'))})
         if request.args.get('depot_status') is not None and request.args.get('depot_status') != '':
-            waybills = waybills.raw({'depot_status': request.args.get('depot_status')})
+            waybills = waybills.raw({'depot_status': int(request.args.get('depot_status'))})
 
         return jsonify(errno=RET.OK, data=[waybill.to_json() for waybill in waybills], totalRows=waybills.count())
     except Exception as e:
