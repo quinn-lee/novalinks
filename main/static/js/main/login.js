@@ -44,7 +44,7 @@ $(document).ready(function() {
                 if (data.errno == "0") {
                     if ( data.data == "admin" ) {
                         // admin登录成功，跳转到主页
-                        location.href = "/admin/users/index.html";
+                        location.href = "/admin/waybill/waybills.html";
                     } else if ( data.data == "operator" ) {
                         // operator登录成功，跳转到主页
                         location.href = "/operator/waybill/waybills.html";
