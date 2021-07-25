@@ -130,11 +130,15 @@ def waybill_index():
         current_email = session.get("email")
         if current_email is None:
             return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
-        operator = User.objects.raw({'email': current_email}).first()
-        if operator is None:
+        user = User.objects.raw({'email': current_email}).first()
+        if user is None:
             return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+        waybills = Waybill.objects.all()
+        if user.role == "operator":
+            waybills = waybills.raw({'operator': user._id})
+        if user.role == "seller":
+            waybills = waybills.raw({'seller': user._id})
 
-        waybills = Waybill.objects.raw({'operator': operator._id})
         if request.args.get('w_no') is not None and request.args.get('w_no') != '':
             waybills = waybills.raw({'w_no': request.args.get('w_no')})
         if request.args.get('customs_apply') is not None and request.args.get('customs_apply') != '':

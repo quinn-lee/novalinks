@@ -33,28 +33,6 @@
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item dropdown mr-4">
-            <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center notification-dropdown" id="notificationDropdown" href="#" data-toggle="dropdown">
-              <i class="mdi mdi-bell mx-0"></i>
-              <span class="count" id="noti" style="display: none;"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notificationDropdown" id="noti-content" style="display: none;">
-              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-              <a class="dropdown-item" href="/seller/authorization/pending.html">
-                <div class="item-thumbnail">
-                  <div class="item-icon bg-info">
-                    <i class="mdi mdi-account-box mx-0"></i>
-                  </div>
-                </div>
-                <div class="item-content">
-                  <h6 class="font-weight-normal">待授权</h6>
-                  <p class="font-weight-light small-text mb-0 text-muted" id="requests">
-
-                  </p>
-                </div>
-              </a>
-            </div>
-          </li>
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
               <span class="nav-profile-name" id="login-name"></span>
@@ -108,45 +86,85 @@
       <div class="main-panel">
         <div class="content-wrapper">
           <div class="row">
-
-            <div class="col-lg-12 grid-margin stretch-card">
+            <div class="col-md-12 grid-margin stretch-card">
               <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-md-2">
-                      <strong>授权</strong>
+                <div class="card-body dashboard-tabs p-0">
+                  <ul class="nav nav-tabs px-4" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="/seller/waybill/waybills.html" role="tab">所有</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/seller/waybill/applying.html" role="tab" >未报关</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/seller/waybill/clearing.html" role="tab" >未清关</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/seller/waybill/depoting.html" role="tab" >未入仓</a>
+                    </li>
+                  </ul>
+                  <div class="col-lg-12 stretch-card" style="padding-left: 0px; padding-right: 0px;">
+                    <div class="card">
+                      <div class="card-body">
+                        <form class="form-sample" id='search-form'>
+                        <div class="alert alert-danger" role="alert" id="notice" style="display: none;"></div>
+                        <div class="row" style="font-size: 14px;">
+                          <div class="col-md-4">
+                            <div class="row">
+                              <label class="col-sm-3 col-form-label">运单号：</label>
+                              <div class="col-sm-9">
+                                <input type="text" class="form-control" name="w_no" id="w_no" />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                              <div class="form-group row">
+                                <button type="submit" class="btn btn-primary mr-2">搜索</button>
+                              </div>
+                            </div>
+                        </div>
+                        </form>
+                      </div>
                     </div>
                   </div>
-                  <div class="table-responsive">
-                    <table class="table table-striped" id="result-listing">
-                      <thead>
-                        <tr>
-                          <th>货代Email</th>
-                          <th>货代名称</th>
-                          <th>授权状态</th>
-                          <th>货代请求授权时间</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody id='table-tr'>
-                      </tbody>
-                      <script id="trTemplate" type="text/x-jsrender">
-                        <tr>
-                          <td>{{>email}}</td>
-                          <td>{{>name}}</td>
-                          <td>{{>status}}</td>
-                          <td>{{>request_time}}</td>
-                          <td>
-                            <button type="button" class="btn btn-inverse-success btn-fw" id="{{>id}}" onclick="auth(this);">授权</button>
-                            <button type="button" class="btn btn-inverse-warning btn-fw" id="{{>id}}" onclick="unauth(this);">拒绝授权</button>
-                          </td>
-                        </tr>
-                      </script>
-                    </table>
+
+                  <div class="col-lg-12 grid-margin stretch-card" style="padding-left: 0px; padding-right: 0px;">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-striped" id="table_details">
+                            <thead>
+                              <tr>
+                                <th>运单号</th>
+                                <th>货代</th>
+                                <th>收件人</th>
+                                <th>报关</th>
+                                <th>货运提单</th>
+                                <th>物流轨迹</th>
+                                <th>交货时间</th>
+                                <th>ETD</th>
+                                <th>ETA</th>
+                                <th>清关</th>
+                                <th>入仓情况</th>
+                                <th>箱数</th>
+                                <th>实重</th>
+                                <th>材重</th>
+                                <th>收费重</th>
+                                <th>费用</th>
+                                <th>申报价值</th>
+                              </tr>
+                            </thead>
+                            <tbody id='table-tr'>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
 
@@ -180,8 +198,7 @@
   <script src="/static/js/data-table.js"></script>
   <script src="/static/js/jquery.dataTables.js"></script>
   <script src="/static/js/dataTables.bootstrap4.js"></script>
-  <script src="/static/js/main/seller/pending.js"></script>
-  <script src="/static/js/main/seller/notification.js"></script>
+  <script src="/static/js/main/seller/waybill_index.js"></script>
   <script src="/static/js/main/session.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
@@ -189,3 +206,16 @@
 </body>
 
 </html>
+
+<style>
+  .dataTables_wrapper .dataTable tbody tr td {
+    font-size: 13px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .table thead th {
+    font-size: 13px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+</style>

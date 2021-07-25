@@ -47,10 +47,10 @@ $(document).ready(function() {
                         location.href = "/admin/users/index.html";
                     } else if ( data.data == "operator" ) {
                         // operator登录成功，跳转到主页
-                        location.href = "/operator/authorization/index.html";
+                        location.href = "/operator/waybill/waybills.html";
                     } else if ( data.data == "seller" ) {
                         // seller登录成功，跳转到主页
-                        location.href = "/seller/authorization/index.html";
+                        location.href = "/seller/waybill/waybills.html";
                     }
                 }
                 else {
