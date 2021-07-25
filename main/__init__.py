@@ -11,6 +11,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from flask_httpauth import HTTPTokenAuth
 import os
 import asyncio
+import datetime
 
 
 auth = HTTPTokenAuth(scheme='Token')
@@ -59,6 +60,36 @@ def orders_query():
             print("orders_query error-{}".format(e))
 
 
+def inbound_query():
+    """预报数据获取定时任务"""
+    with app.app_context():
+        if os.path.exists('shutdown.txt'):
+            return
+        from main.utils.inbounds import inbound_query
+
+        async def process_inbound(waybill):
+            try:
+                inbound_query(waybill.w_no)
+                return "process_inbound success"
+            except Exception as error:
+                return "process_inbound error-{}".format(error)
+
+        new_loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(new_loop)
+        loop = asyncio.get_event_loop()
+        try:
+            from main.models import Waybill
+            tasks = [asyncio.ensure_future(process_inbound(waybill)) for waybill in Waybill.objects.raw({'created_time': {'$gt': (datetime.datetime.utcnow() - datetime.timedelta(days=30))}})]
+            print(len(tasks))
+
+            loop.run_until_complete(asyncio.wait(tasks))
+
+            for task in tasks:
+                print('Task orders_query ret: ', task.result())
+        except Exception as e:
+            print("orders_query error-{}".format(e))
+
+
 def order_items_query():
     pass
 
@@ -82,6 +113,12 @@ def create_app(environment):
                     'func': orders_query,
                     "trigger": "interval",
                     "days": 100
+                },
+                {
+                    'id': 'inbound_query',
+                    'func': inbound_query,
+                    "trigger": "interval",
+                    "minutes": 10
                 }
             ],
             'SCHEDULER_TIMEZONE': 'Asia/Shanghai',

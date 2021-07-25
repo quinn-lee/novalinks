@@ -149,6 +149,7 @@ class Waybill(MongoModel):
     depot_status = fields.IntegerField(blank=True, default=0)  # 0-未入仓，1-已入仓（点击可查看POD，操作员上传）
     pod = fields.FileField(blank=True)  # pod文件
     pod_name = fields.CharField(blank=True)  # pod文件
+    created_time = fields.DateTimeField(default=datetime.datetime.now)
 
     class Meta:
         indexes = [
