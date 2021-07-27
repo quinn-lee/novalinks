@@ -148,6 +148,24 @@
                       </div>
                       <div class="col-md-6">
                         <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">费用(头程)：</label>
+                          <div class="col-sm-9">
+                            <div class="input-group col-xs-12">
+                              <input type="text" class="form-control" name="fare" id="fare"/>
+                              <select class="form-control" id="fare_currency" name='fare_currency'>
+                                <option></option>
+                                <option value="EUR">欧元</option>
+                                <option value="CNY">人民币</option>
+                                <option value="USD">美元</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
                           <label class="col-sm-3 col-form-label">清关情况：</label>
                           <div class="col-sm-9">
                             <select class="form-control" id="customs_declaration" name='customs_declaration'>
@@ -157,8 +175,6 @@
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
                           <label class="col-sm-3 col-form-label">清关代理信息：</label>
@@ -172,10 +188,6 @@
                       <div class="col-md-2">
                         <div class="form-group row">
                           <button type="submit" class="btn btn-primary mr-2">修改</button>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="form-group row">
                           <a href="/operator/waybill/waybills.html" class="btn btn-success mr-2">返回</a>
                         </div>
                       </div>

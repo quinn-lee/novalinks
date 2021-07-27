@@ -91,6 +91,8 @@ $(document).ready(function() {
         formData.append("customs_declaration", $("#customs_declaration").find("option:selected").val());
         formData.append("etd", $("#etd").val());
         formData.append("eta", $("#eta").val());
+        formData.append("fare", $("#fare").val());
+        formData.append("fare_currency", $("#fare_currency").val());
 
         $.ajax({
             url:"/api/v1.0/waybills/create",

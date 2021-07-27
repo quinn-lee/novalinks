@@ -171,6 +171,8 @@ def waybill_create():
         customs_declaration = request.form.get('customs_declaration')
         etd = request.form.get('etd')
         eta = request.form.get('eta')
+        fare = request.form.get('fare')
+        fare_currency = request.form.get('fare_currency')
 
         # 校验参数
         # 参数完整的校验
@@ -218,6 +220,10 @@ def waybill_create():
             waybill.customs_apply = customs_apply
         if customs_declaration is not None and customs_declaration != "":
             waybill.customs_declaration = customs_declaration
+        if fare is not None and fare != "":
+            waybill.fare = fare
+        if fare_currency is not None and fare_currency != "":
+            waybill.fare_currency = fare_currency
         waybill.save()
     except Exception as e:
         current_app.logger.error(e)
@@ -241,6 +247,8 @@ def waybill_update():
         eta = request.form.get('eta')
         waybill_id = request.form.get('id')
         agent_info = request.form.get('agent_info')
+        fare = request.form.get('fare')
+        fare_currency = request.form.get('fare_currency')
 
         if waybill_id is None or waybill_id == "":
             return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
@@ -282,6 +290,16 @@ def waybill_update():
             waybill.agent_info = agent_info
         else:
             waybill.agent_info = None
+
+        if fare is not None and fare != "":
+            waybill.fare = fare
+        else:
+            waybill.fare = None
+
+        if fare_currency is not None and fare_currency != "":
+            waybill.fare_currency = fare_currency
+        else:
+            waybill.fare_currency = None
         waybill.save()
     except Exception as e:
         current_app.logger.error(e)

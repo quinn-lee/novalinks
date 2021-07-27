@@ -37,6 +37,8 @@ $(document).ready(function() {
                 $("#agent_info").val(resp.data['agent_info'])
                 $("#customs_apply").val(resp.data['ca_code']);
                 $("#customs_declaration").val(resp.data['cd_code']);
+                $("#fare_currency").val(resp.data['fare_currency']);
+                $("#fare").val(resp.data['fare']);
             }
             else {
                 location.href = "/operator/waybill/waybills.html"
@@ -72,6 +74,8 @@ $(document).ready(function() {
         formData.append("customs_declaration", $("#customs_declaration").find("option:selected").val());
         formData.append("etd", $("#etd").val());
         formData.append("eta", $("#eta").val());
+        formData.append("fare", $("#fare").val());
+        formData.append("fare_currency", $("#fare_currency").val());
         formData.append("agent_info", $("#agent_info").val());
         formData.append("id", $("#waybill_id").val())
 

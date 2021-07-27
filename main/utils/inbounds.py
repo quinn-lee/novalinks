@@ -14,6 +14,7 @@ def inbound_query(inbound_num):
             waybill.wms_user = wms_info.get('nickname')
             waybill.depot_status = wms_info.get('inbound_status')
             waybill.cont_num = wms_info.get('箱数')
+            waybill.real_weight = wms_info.get('重量')
             wms_info.pop('nickname')
             wms_info.pop('inbound_status')
             waybill.wms_info = wms_info

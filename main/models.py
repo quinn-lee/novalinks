@@ -136,7 +136,8 @@ class Waybill(MongoModel):
     real_weight = fields.FloatField(blank=True)  # 实重，与WMS同步
     volume_weight = fields.FloatField(blank=True)  # 材重，与WMS同步
     billing_weight = fields.FloatField(blank=True)  # 收费重，操作员填写
-    fare = fields.FloatField(blank=True)  # 费用，计算
+    fare = fields.FloatField(blank=True)  # 费用，填写
+    fare_currency = fields.CharField(blank=True)  # 费用货币
     declared_value = fields.FloatField(blank=True)  # 申报价值，wms备案换算
     customs_apply = fields.IntegerField(blank=True)  # 报关情况，0-未报关，1-已报关，由操作员填写
     lading_bill = fields.FileField(blank=True)  # 货运提单，由操作员上传
@@ -173,6 +174,8 @@ class Waybill(MongoModel):
             'volume_weight': self.volume_weight,
             'billing_weight': self.billing_weight,
             'fare': self.fare,
+            'fare_currency': self.fare_currency,
+            'fare_desc': "{} {}".format(self.fare, {'EUR': '欧元', 'CNY': '人民币', 'USD': '美元'}.get(self.fare_currency)) if self.fare is not None else "",
             'declared_value': self.declared_value,
             'customs_apply': {0: '未报关', 1: '已报关'}.get(self.customs_apply),
             'ca_code': self.customs_apply,
