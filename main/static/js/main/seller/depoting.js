@@ -237,7 +237,7 @@ $(document).ready(function() {
                 },
                 {'data': 'billing_weight',  "orderable": false
                 },
-                {'data': 'fare',  "orderable": false
+                {'data': 'fare_desc',  "orderable": false
                 },
                 {'data': 'declared_value',  "orderable": false
                 },
