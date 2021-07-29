@@ -213,6 +213,7 @@ def waybill_create():
             waybill.lading_bill_name = secure_filename(lading_bill.filename)
         if delivery_time is not None and delivery_time != "":
             waybill.delivery_time = datetime.datetime.strptime(delivery_time, '%Y/%m/%d %H:%M')
+
         if etd is not None and etd != "":
             waybill.etd = datetime.datetime.strptime(etd, '%Y/%m/%d %H:%M')
         if eta is not None and eta != "":
@@ -228,6 +229,23 @@ def waybill_create():
         if fare_currency is not None and fare_currency != "":
             waybill.fare_currency = fare_currency
         waybill.save()
+        # 自动保存物流记录
+        if waybill.delivery_time is not None:
+            tracking_info = TrackingInfo(waybill=waybill, event_time=waybill.delivery_time,
+                                         event="货已入库", location="", description="")
+            tracking_info.save()
+        if waybill.etd is not None:
+            tracking_info = TrackingInfo(waybill=waybill, event_time=waybill.etd,
+                                         event="货已发出", location="", description="")
+            tracking_info.save()
+        if waybill.eta is not None:
+            tracking_info = TrackingInfo(waybill=waybill, event_time=waybill.eta,
+                                         event="货已到达", location="", description="")
+            tracking_info.save()
+        if waybill.customs_declaration == 1:
+            tracking_info = TrackingInfo(waybill=waybill, event_time=datetime.datetime.now(),
+                                         event="货已清关", location="", description="")
+            tracking_info.save()
     except Exception as e:
         current_app.logger.error(e)
         return jsonify(errno=RET.DBERR, errmag="数据库异常")
@@ -304,6 +322,34 @@ def waybill_update():
         else:
             waybill.fare_currency = None
         waybill.save()
+        # 自动保存物流记录
+        TrackingInfo.objects.raw(
+            {'waybill': waybill._id, 'event': "货已入库", 'location': "", 'description': ""}).delete()
+        TrackingInfo.objects.raw(
+            {'waybill': waybill._id, 'event': "货已发出", 'location': "", 'description': ""}).delete()
+        TrackingInfo.objects.raw(
+            {'waybill': waybill._id, 'event': "货已到达", 'location': "", 'description': ""}).delete()
+        if waybill.delivery_time is not None:
+            tracking_info = TrackingInfo(waybill=waybill, event_time=waybill.delivery_time,
+                                         event="货已入库", location="", description="")
+            tracking_info.save()
+        if waybill.etd is not None:
+            tracking_info = TrackingInfo(waybill=waybill, event_time=waybill.etd,
+                                         event="货已发出", location="", description="")
+            tracking_info.save()
+        if waybill.eta is not None:
+            tracking_info = TrackingInfo(waybill=waybill, event_time=waybill.eta,
+                                         event="货已到达", location="", description="")
+            tracking_info.save()
+        if waybill.customs_declaration == 1:
+            if TrackingInfo.objects.raw({'waybill': waybill._id, 'event': "货已清关", 'location': "", 'description': ""})\
+                    .count() == 0:
+                tracking_info = TrackingInfo(waybill=waybill, event_time=datetime.datetime.now(),
+                                             event="货已清关", location="", description="")
+                tracking_info.save()
+        else:
+            TrackingInfo.objects.raw(
+                {'waybill': waybill._id, 'event': "货已清关", 'location': "", 'description': ""}).delete()
     except Exception as e:
         current_app.logger.error(e)
         return jsonify(errno=RET.DBERR, errmag="数据库异常")
