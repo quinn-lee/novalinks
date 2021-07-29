@@ -27,6 +27,7 @@ class User(MongoModel):
 
     role = fields.CharField()  # 角色 admin/seller/operator/inspector
     status = fields.IntegerField(default=0)  # 0-正常/1-停用
+    nord_code = fields.CharField(blank=True)  # 用户三位代码
 
     class Meta:
         indexes = [
@@ -41,7 +42,8 @@ class User(MongoModel):
             'email': self.email,
             'name': self.name,
             'role': self.role,
-            'status': {0: '正常', 1: '停用'}.get(self.status)
+            'status': {0: '正常', 1: '停用'}.get(self.status),
+            'nord_code': self.nord_code
         }
 
     def check_password(self, passwd):

@@ -26,6 +26,7 @@ $(document).ready(function() {
         name = $("#name").val();
         password = $("#password").val();
         password_confirm = $("#password_confirm").val();
+        nord_code = $("#nord_code").val();
         if (!role) {
             $("#notice").html("请选择角色！");
             $("#notice").show();
@@ -57,7 +58,8 @@ $(document).ready(function() {
             email: email,
             name: name,
             password: password,
-            password_confirm: password_confirm
+            password_confirm: password_confirm,
+            nord_code: nord_code
         };
         // 将data转为json字符串
         var jsonData = JSON.stringify(data);

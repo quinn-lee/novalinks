@@ -5,6 +5,7 @@ from main.models import User, UserLog, Authorization
 from werkzeug.security import generate_password_hash
 from main.utils.response_code import RET
 import re
+import requests
 
 
 @api.route("/users", methods=["GET"])
@@ -38,6 +39,7 @@ def create_user():
         password_confirm = req_dict.get("password_confirm")
         name = req_dict.get("name")
         role = req_dict.get("role")
+        nord_code = req_dict.get("nord_code")
 
         # 校验参数
         # 参数完整的校验
@@ -61,7 +63,7 @@ def create_user():
 
     # 保存记录
     try:
-        new = User(name=name, email=email, pwd=generate_password_hash(password), role=role)
+        new = User(name=name, email=email, pwd=generate_password_hash(password), role=role, nord_code=nord_code)
         new.save()
     except Exception as e:
         current_app.logger.error(e)
@@ -88,3 +90,55 @@ def query_users():
     data = [user.to_json() for user in users]
     current_app.logger.info(data)
     return jsonify(errno='0', data=data)
+
+
+@api.route("/users/wms_inventories", methods=["GET"])
+def wms_inventories():
+    """admin/inspector查询库存数据"""
+    nord_code = request.args.get('nord_code')
+    res = requests.get(
+        "http://213.219.38.160:6001/api/v1.0/inventories/nova_inventories?abbr_code={}".format(
+            nord_code))
+    if res.json().get('status') == "succ":
+        return jsonify(errno='0', data=res.json().get('data'), totalRows=len(res.json().get('data')))
+    else:
+        return jsonify(errno=RET.REQERR, errmsg="请求数据错误")
+
+
+@api.route("/users/wms_packs_inventories", methods=["GET"])
+def wms_packs_inventories():
+    """admin/inspector查询库存数据"""
+    nord_code = request.args.get('nord_code')
+    res = requests.get(
+        "http://213.219.38.160:6001/api/v1.0/inbound_packs/nova_inventory?abbr_code={}".format(
+            nord_code))
+    if res.json().get('status') == "succ":
+        return jsonify(errno='0', data=res.json().get('data'), totalRows=len(res.json().get('data')))
+    else:
+        return jsonify(errno=RET.REQERR, errmsg="请求数据错误")
+
+
+@api.route("/users/wms_packs_inventory_skus", methods=["GET"])
+def wms_packs_inventory_skus():
+    """admin/inspector查询库存数据"""
+    nord_code = request.args.get('nord_code')
+    res = requests.get(
+        "http://213.219.38.160:6001/api/v1.0/inbound_packs/nova_sku_inventory?abbr_code={}".format(
+            nord_code))
+    if res.json().get('status') == "succ":
+        return jsonify(errno='0', data=res.json().get('data'), totalRows=len(res.json().get('data')))
+    else:
+        return jsonify(errno=RET.REQERR, errmsg="请求数据错误")
+
+
+@api.route("/users/wms_spec_summary", methods=["GET"])
+def wms_spec_summary():
+    """admin/inspector查询库存数据"""
+    nord_code = request.args.get('nord_code')
+    res = requests.get(
+        "http://213.219.38.160:6001/api/v1.0/inbound_parcels/nova_spec_summary?abbr_code={}".format(
+            nord_code))
+    if res.json().get('status') == "succ":
+        return jsonify(errno='0', data=res.json().get('data'), totalRows=len(res.json().get('data')))
+    else:
+        return jsonify(errno=RET.REQERR, errmsg="请求数据错误")
