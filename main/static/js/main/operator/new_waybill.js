@@ -70,7 +70,7 @@ $(document).ready(function() {
             return;
         }
         if (!w_no) {
-            $("#notice").html("请填写运单号！");
+            $("#notice").html("请填写入仓号！");
             $("#notice").show();
             return;
         }

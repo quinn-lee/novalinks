@@ -225,6 +225,8 @@ $(document).ready(function() {
                          return "<a title='修改运单信息' href='/operator/waybill/edit.html?id="+ data.id + "'><i class='mdi mdi-table-edit text-success'></i>" + "</a>&nbsp;&nbsp;<a title='删除运单' href='#' id='delwaybill_"+ data.id + "' onclick=delete_waybill(this);><i class='mdi mdi-delete-forever text-danger'></i>" + "</a>";
                     }
                 },
+                {'data': 's_no',  "orderable": false
+                },
                 {'data': null, "orderable": false,
                     render: function (data, type, full) {
                         html_str = ""
@@ -236,6 +238,8 @@ $(document).ready(function() {
                         }
                         return "<div class='dropdown'><a class='btn btn-secondary dropdown-toggle p-0 bg-transparent border-0 text-dark shadow-none font-weight-medium' href='#' style='font-size: 12px;' role='button' id='dropdownMenuLinkA' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='mb-0 d-inline-block'>" + data.w_no + "</span></a><div class='dropdown-menu' aria-labelledby='dropdownMenuLinkA'>" + html_str + "</div></div>"
                     }
+                },
+                {'data': 'container_num',  "orderable": false
                 },
                 {'data': null,  "orderable": false,
                     render: function (data, type, full) {

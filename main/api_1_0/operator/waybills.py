@@ -7,6 +7,7 @@ from main.utils.response_code import RET
 from bson import ObjectId
 from werkzeug.utils import secure_filename
 import datetime
+import random
 
 
 @api.route("/waybills/edit", methods=["GET"])
@@ -173,7 +174,9 @@ def waybill_create():
         eta = request.form.get('eta')
         fare = request.form.get('fare')
         fare_currency = request.form.get('fare_currency')
-
+        s_no = datetime.datetime.now().strftime('W%M%S%f')
+        if Waybill.objects.raw({'s_no': s_no}).count() > 0:
+            s_no = datetime.datetime.now().strftime('W%M%S%f')
         # 校验参数
         # 参数完整的校验
         if not all([seller_email, w_no, depot_id]):
@@ -204,7 +207,7 @@ def waybill_create():
 
     # 保存记录
     try:
-        waybill = Waybill(w_no=w_no, seller=seller, operator=operator, depot=depot)
+        waybill = Waybill(w_no=w_no, seller=seller, operator=operator, depot=depot, s_no=s_no)
         if lading_bill is not None:
             waybill.lading_bill = lading_bill
             waybill.lading_bill_name = secure_filename(lading_bill.filename)

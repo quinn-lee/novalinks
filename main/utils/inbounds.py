@@ -15,7 +15,9 @@ def inbound_query(inbound_num):
             waybill.depot_status = wms_info.get('inbound_status')
             waybill.cont_num = wms_info.get('箱数')
             waybill.real_weight = wms_info.get('重量')
+            waybill.container_num = wms_info.get('container_num')
             wms_info.pop('nickname')
             wms_info.pop('inbound_status')
+            wms_info.pop('container_num')
             waybill.wms_info = wms_info
             waybill.save()

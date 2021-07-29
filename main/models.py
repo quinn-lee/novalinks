@@ -128,7 +128,9 @@ class Depot(MongoModel):
 
 # 运单
 class Waybill(MongoModel):
-    w_no = fields.CharField()  # 运单号（预报号）
+    s_no = fields.CharField()  # 运单号，自动产生
+    w_no = fields.CharField()  # 入仓号（预报号）
+    container_num = fields.CharField(blank=True)  # 货柜号
     seller = fields.ReferenceField(User)  # 用户（卖家名）
     wms_user = fields.CharField(blank=True)  # wms用户名
     operator = fields.ReferenceField(User)  # 服务商（操作员）
@@ -165,7 +167,9 @@ class Waybill(MongoModel):
     def to_json(self):
         return {
             'id': str(self._id),
+            's_no': self.s_no,
             'w_no': self.w_no,
+            'container_num': self.container_num,
             'seller': self.seller.name,
             'wms_user': self.wms_user,
             'operator': self.operator.name,
