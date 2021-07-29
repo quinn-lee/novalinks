@@ -150,6 +150,8 @@ $(document).ready(function() {
             },
             "columns": [
                 //跟你要显示的字段是一一对应的。
+                {'data': 's_no',  "orderable": false
+                },
                 {'data': null, "orderable": false,
                     render: function (data, type, full) {
                         html_str = ""
@@ -161,6 +163,8 @@ $(document).ready(function() {
                         }
                         return "<div class='dropdown'><a class='btn btn-secondary dropdown-toggle p-0 bg-transparent border-0 text-dark shadow-none font-weight-medium' href='#' style='font-size: 12px;' role='button' id='dropdownMenuLinkA' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='mb-0 d-inline-block'>" + data.w_no + "</span></a><div class='dropdown-menu' aria-labelledby='dropdownMenuLinkA'>" + html_str + "</div></div>"
                     }
+                },
+                {'data': 'container_num',  "orderable": false
                 },
                 {'data': 'operator'
                 },
