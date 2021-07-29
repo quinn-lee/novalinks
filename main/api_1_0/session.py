@@ -61,6 +61,7 @@ def login():
     # 如果验证相同成功,保存登录状态, 在 session中
     session["name"] = user.name
     session["email"] = user.email
+    session["nord_code"] = user.nord_code
 
     return jsonify(errno=RET.OK, errmsg="登录成功", data=user.role)
 
@@ -70,10 +71,11 @@ def check_login():
     """检查登录状态"""
     # 尝试从session中获取用户的名字
     name = session.get("name")
+    nord_code = session.get("nord_code")
     current_app.logger.error("check_login --{}".format(session.get("email")))
     # 如果session中数据name名字存在,则表示用户已登录,则未登录
     if name is not None:
-        return jsonify(errno=RET.OK, errmsg="true", data={"name": name})
+        return jsonify(errno=RET.OK, errmsg="true", data={"name": name, "nord_code": nord_code})
     else:
         return jsonify(errno=RET.SESSIONERR, errmsg="false")
 
