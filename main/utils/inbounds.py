@@ -1,6 +1,7 @@
 import requests
 from flask import current_app
-from main.models import Waybill
+from main.models import Waybill, TrackingInfo
+import datetime
 
 
 def inbound_query(inbound_num):
@@ -21,3 +22,13 @@ def inbound_query(inbound_num):
             wms_info.pop('container_num')
             waybill.wms_info = wms_info
             waybill.save()
+            if waybill.depot_status == 1:
+                if TrackingInfo.objects.raw(
+                        {'waybill': waybill._id, 'event': "货已入仓", 'location': "", 'description': ""}) \
+                        .count() == 0:
+                    tracking_info = TrackingInfo(waybill=waybill, event_time=datetime.datetime.now(),
+                                                 event="货已入仓", location="", description="")
+                    tracking_info.save()
+            else:
+                TrackingInfo.objects.raw(
+                    {'waybill': waybill._id, 'event': "货已入仓", 'location': "", 'description': ""}).delete()
