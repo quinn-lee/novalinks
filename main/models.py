@@ -43,6 +43,7 @@ class User(MongoModel):
             'name': self.name,
             'role': self.role,
             'status': {0: '正常', 1: '停用'}.get(self.status),
+            'status_code': self.status,
             'nord_code': self.nord_code
         }
 

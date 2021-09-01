@@ -72,6 +72,69 @@ def create_user():
     return jsonify(errno=RET.OK, errmsg="用户创建成功")
 
 
+@api.route("/users/update", methods=["POST"])
+def update_user():
+    """admin修改用户
+        参数： 用户名 邮箱 密码 密码确认 状态
+        """
+    # 获取参数
+    current_app.logger.info("request_data: {}".format(request.get_data()))
+    try:
+        current_app.logger.info("request_json: {}".format(request.get_json()))
+        req_dict = request.get_json()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.NOTJSON, errmsg="参数非Json格式")
+    try:
+        if req_dict is None:
+            return jsonify(errno=RET.NOTJSON, errmsg="参数非Json格式")
+        email = req_dict.get("email")
+        password = req_dict.get("password")
+        password_confirm = req_dict.get("password_confirm")
+        name = req_dict.get("name")
+        status = req_dict.get("status")
+        role = req_dict.get("role")
+        nord_code = req_dict.get("nord_code")
+
+        # 校验参数
+        # 参数完整的校验
+        if not all([email, name, role, status]):
+            return jsonify(errno=RET.PARAMERR, errmsg="参数不完整")
+
+        user = User.objects.raw({'email': email}).first()
+        if user is None:
+            return jsonify(errno=RET.DATAERR, errmsg="用户不存在")
+        # 密码与确认密码进行比对
+        if password is not None and password != "":
+            if password != password_confirm:
+                current_app.logger.error(password)
+                current_app.logger.error(password_confirm)
+                return jsonify(errno=RET.DATAERR, errmsg="密码与确认密码不一致")
+            else:
+                user.pwd = generate_password_hash(password)
+        if name is not None and name != "":
+            user.name = name
+        if nord_code is not None and nord_code != "":
+            user.nord_code = nord_code
+        if status is not None and status != "":
+            user.status = status
+        if role is not None and role != "":
+            user.role = role
+
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
+
+    # 保存记录
+    try:
+        user.save()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmag="数据库异常")
+
+    return jsonify(errno=RET.OK, errmsg="用户修改成功")
+
+
 @api.route("/users/index", methods=["POST"])
 def query_users():
     """admin/inspector查询用户数据"""
