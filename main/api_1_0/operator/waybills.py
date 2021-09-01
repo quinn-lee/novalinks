@@ -139,6 +139,9 @@ def waybill_index():
             waybills = waybills.raw({'operator': user._id})
         if user.role == "seller":
             waybills = waybills.raw({'seller': user._id})
+        if user.role == "inspector":
+            auths = Authorization.objects.raw({'from_user': user._id, 'status': 1})
+            waybills = waybills.raw({'seller': {'$in': [auth.to_user._id for auth in auths]}})
 
         if request.args.get('w_no') is not None and request.args.get('w_no') != '':
             waybills = waybills.raw({'w_no': request.args.get('w_no')})

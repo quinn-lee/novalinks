@@ -82,6 +82,15 @@ def query_users():
         current_app.logger.error(e)
         return jsonify(errno=RET.NOTJSON, errmsg="参数非Json格式")
     users = User.objects.raw({'role': {'$ne': 'admin'}})
+    current_email = session.get("email")
+    if current_email is None:
+        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+    user = User.objects.raw({'email': current_email}).first()
+    if user is None:
+        return jsonify(errno=RET.SESSIONERR, errmsg="当前用户登录过期，请重新登录！")
+    if user.role == "inspector":
+        auths = Authorization.objects.raw({'from_user': user._id, 'status': 1})
+        users = users.raw({'_id': {'$in': [auth.to_user._id for auth in auths]}})
     if req_dict is not None:
         if req_dict.get('email') is not None and req_dict.get('email') != '':
             users = users.raw({'email': req_dict.get('email')})
