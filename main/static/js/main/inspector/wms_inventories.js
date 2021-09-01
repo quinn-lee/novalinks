@@ -17,6 +17,18 @@ $(document).ready(function() {
 
     var queryData = decodeQuery();
     var nord_code = queryData["nord_code"];
+    var sku_code = queryData["sku_code"];
+    var barcode = queryData["barcode"];
+    if(sku_code==undefined){
+        sku_code = ""
+    }
+    if(barcode==undefined){
+        barcode = ""
+    }
+
+    $("#nord_code").val(nord_code)
+    $("#sku_code").val(sku_code)
+    $("#barcode").val(barcode)
     if (!nord_code) {
         location.href = "/inspector/users/index.html";
     }
@@ -86,6 +98,8 @@ $(document).ready(function() {
                 param.currentPage = (data.start / data.length) + 1;//当前页码
                 param.action = 'search';
                 param.nord_code = nord_code;
+                param.sku_code = sku_code;
+                param.barcode = barcode;
                 //console.log(param);
                 //ajax请求数据
                 $.ajax({

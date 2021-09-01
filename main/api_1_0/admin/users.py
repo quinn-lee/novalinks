@@ -168,9 +168,11 @@ def query_users():
 def wms_inventories():
     """admin/inspector查询库存数据"""
     nord_code = request.args.get('nord_code')
+    sku_code = request.args.get('sku_code')
+    barcode = request.args.get('barcode')
     res = requests.get(
-        "http://213.219.38.160:6001/api/v1.0/inventories/nova_inventories?abbr_code={}".format(
-            nord_code))
+        "http://213.219.38.160:6001/api/v1.0/inventories/nova_inventories?abbr_code={}&sku_code={}&barcode={}".format(
+            nord_code, sku_code, barcode))
     if res.json().get('status') == "succ":
         return jsonify(errno='0', data=res.json().get('data'), totalRows=len(res.json().get('data')))
     else:

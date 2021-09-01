@@ -115,6 +115,39 @@
                       <a class="inv nav-link" href="/inspector/users/wms_spec_summary.html" role="tab" >NSIN库存列表</a>
                     </li>
                   </ul>
+                  <div class="col-lg-12 stretch-card" style="padding-left: 0px; padding-right: 0px;">
+                    <div class="card">
+                      <div class="card-body">
+                        <form class="form-sample" id='search-form'>
+                        <div class="alert alert-danger" role="alert" id="notice" style="display: none;"></div>
+                        <input type="hidden" class="form-control" name="nord_code" id="nord_code" />
+                        <div class="row" style="font-size: 14px;">
+                          <div class="col-md-4">
+                            <div class="row">
+                              <label class="col-sm-4 col-form-label">SKU CODE：</label>
+                              <div class="col-sm-8">
+                                <input type="text" class="form-control" name="sku_code" id="sku_code" />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="row">
+                              <label class="col-sm-4 col-form-label">BARCODE：</label>
+                              <div class="col-sm-8">
+                                <input type="text" class="form-control" name="barcode" id="barcode" />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                              <div class="form-group row">
+                                <button type="submit" class="btn btn-primary mr-2">搜索</button>
+                              </div>
+                            </div>
+                        </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
                   <div class="col-lg-12 grid-margin stretch-card" style="padding-left: 0px; padding-right: 0px;">
                     <div class="card">
                       <div class="card-body">
