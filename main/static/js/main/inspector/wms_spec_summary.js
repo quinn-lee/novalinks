@@ -17,7 +17,7 @@ $(document).ready(function() {
 
     var queryData = decodeQuery();
     var nord_code = queryData["nord_code"];
-    if (!nord_code) {
+    if (!nord_code || nord_code == undefined) {
         location.href = "/inspector/users/index.html";
     }
     $(".inv.nav-link").each(function(){

@@ -4,7 +4,7 @@
 from flask_script import Manager
 from main import app, scheduler
 from flask_script import Shell
-from main.models import User, UserLog, Order, OrderItem, Inventory, Authorization, Depot, Waybill, TrackingInfo
+from main.models import User, UserLog, Order, OrderItem, Inventory, Authorization, Depot, Waybill, TrackingInfo, InvPrice
 from getpass import getpass
 from werkzeug.security import generate_password_hash
 from main.utils.orders import obtain_orders, obtain_order_items, obtain_order_address
@@ -18,7 +18,7 @@ manager = Manager(app)
 def make_shell_context():
     return dict(app=app, User=User, UserLog=UserLog, Order=Order, OrderItem=OrderItem, Inventory=Inventory,
                 scheduler=scheduler, obtain_orders=obtain_orders, obtain_order_items=obtain_order_items,
-                Authorization=Authorization, Depot=Depot, Waybill=Waybill, TrackingInfo=TrackingInfo)
+                Authorization=Authorization, Depot=Depot, Waybill=Waybill, TrackingInfo=TrackingInfo, InvPrice=InvPrice)
 
 
 manager.add_command('shell', Shell(make_context=make_shell_context))

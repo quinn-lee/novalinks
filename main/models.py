@@ -241,6 +241,22 @@ class TrackingInfo(MongoModel):
         }
 
 
+# 库存价格
+class InvPrice(MongoModel):
+    nord_code = fields.CharField()
+    sku_code = fields.CharField()
+    price = fields.FloatField()
+    created_at = fields.DateTimeField(default=datetime.datetime.now)
+
+    def to_json(self):
+        return {
+            'nord_code': self.nord_code,
+            'sku_code': self.sku_code,
+            'price': self.price,
+            'created_at': self.created_at.strftime("%Y/%m/%d %H:%M")
+        }
+
+
 # 登录日志
 class UserLog(MongoModel):
     user = fields.ReferenceField(User)  # 所属用户

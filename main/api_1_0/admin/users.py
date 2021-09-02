@@ -1,7 +1,7 @@
 # coding:utf-8
 from main.api_1_0 import api
 from flask import request, jsonify, current_app, session
-from main.models import User, UserLog, Authorization
+from main.models import User, UserLog, Authorization, InvPrice
 from werkzeug.security import generate_password_hash
 from main.utils.response_code import RET
 import re
@@ -174,7 +174,12 @@ def wms_inventories():
         "http://213.219.38.160:6001/api/v1.0/inventories/nova_inventories?abbr_code={}&sku_code={}&barcode={}".format(
             nord_code, sku_code, barcode))
     if res.json().get('status') == "succ":
-        return jsonify(errno='0', data=res.json().get('data'), totalRows=len(res.json().get('data')))
+        inventories = res.json().get('data')
+        for inventory in inventories:
+            invs = InvPrice.objects.raw({'nord_code': nord_code, 'sku_code': inventory.get('sku_code')})
+            if invs.count() > 0:
+                inventory['price'] = invs.first().price
+        return jsonify(errno='0', data=inventories, totalRows=len(res.json().get('data')))
     else:
         return jsonify(errno=RET.REQERR, errmsg="请求数据错误")
 
@@ -216,3 +221,38 @@ def wms_spec_summary():
         return jsonify(errno='0', data=res.json().get('data'), totalRows=len(res.json().get('data')))
     else:
         return jsonify(errno=RET.REQERR, errmsg="请求数据错误")
+
+
+@api.route("/users/update_sku_price", methods=["POST"])
+def update_sku_price():
+    """insprctor 修改sku价格
+        参数： nord_code, sku_code, price
+        """
+    # 获取参数
+    try:
+        nord_code = request.form.get('nord_code')
+        sku_code = request.form.get('sku_code')
+        price = request.form.get('price')
+
+        if nord_code is None or nord_code == "":
+            return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
+        if sku_code is None or sku_code == "":
+            return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
+        if price is None or price == "":
+            return jsonify(errno=RET.PARAMERR, errmsg="参数不正确！")
+
+        InvPrice.objects.raw({'nord_code': nord_code, 'sku_code': sku_code}).delete()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.UNKOWNERR, errmsg=e)
+
+    # 保存记录
+    try:
+        inv_price = InvPrice(nord_code=nord_code, sku_code=sku_code, price=price)
+        inv_price.save()
+
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmag="数据库异常")
+
+    return jsonify(errno=RET.OK, errmsg="价格修改成功")

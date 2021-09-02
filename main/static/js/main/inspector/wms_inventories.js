@@ -29,7 +29,7 @@ $(document).ready(function() {
     $("#nord_code").val(nord_code)
     $("#sku_code").val(sku_code)
     $("#barcode").val(barcode)
-    if (!nord_code) {
+    if (!nord_code || nord_code == undefined) {
         location.href = "/inspector/users/index.html";
     }
     $(".inv.nav-link").each(function(){
@@ -137,7 +137,14 @@ $(document).ready(function() {
                 },
                 {'data': 'problem_quantity',  "orderable": false
                 },
-                {'data': 'price',  "orderable": false
+                {'data': null,  "orderable": false,
+                    render: function (data, type, full) {
+                        if(data.price != null){
+                            return data.price + "&nbsp;&nbsp;&nbsp;<a title='修改运单信息' href='/inspector/users/edit_price.html?nord_code="+ nord_code + "&sku_code="+ data.sku_code + "&price=" + data.price + "'>修改价格</a>";
+                        } else {
+                            return "<a title='修改运单信息' href='/inspector/users/edit_price.html?nord_code="+ nord_code + "&sku_code="+ data.sku_code + "&price='>修改价格</a>";
+                        }
+                    }
                 },
             ],
             "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull)            {                    //列样式处理

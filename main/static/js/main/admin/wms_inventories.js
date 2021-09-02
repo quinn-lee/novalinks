@@ -29,7 +29,7 @@ $(document).ready(function() {
     $("#sku_code").val(sku_code)
     $("#barcode").val(barcode)
 
-    if (!nord_code) {
+    if (!nord_code || nord_code == undefined) {
         location.href = "/admin/users/index.html";
     }
     $(".inv.nav-link").each(function(){

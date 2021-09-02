@@ -24,8 +24,8 @@
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="navbar-brand-wrapper d-flex justify-content-center">
         <div class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">
-          <a class="navbar-brand brand-logo" href="/admin/waybill/waybills.html"><img src="/static/images/nova/logo-nl.jpg" alt="logo"/></a>
-          <a class="navbar-brand brand-logo-mini" href="/admin/waybill/waybills.html"><img src="/static/images/nova/logo-nl.jpg" alt="logo"/></a>
+          <a class="navbar-brand brand-logo" href="/operator/waybill/waybills.html"><img src="/static/images/nova/logo-nl.jpg" alt="logo"/></a>
+          <a class="navbar-brand brand-logo-mini" href="/operator/waybill/waybills.html"><img src="/static/images/nova/logo-nl.jpg" alt="logo"/></a>
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
             <span class="mdi mdi-sort-variant"></span>
           </button>
@@ -98,90 +98,40 @@
       <div class="main-panel">
         <div class="content-wrapper">
           <div class="row">
+
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card">
-                <div class="card-body dashboard-tabs p-0">
-                  <ul class="nav nav-tabs px-4" role="tablist">
-                    <li class="nav-item">
-                      <a class="inv nav-link active" href="/inspector/users/wms_inventories.html" role="tab">SKU库存列表</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="inv nav-link" href="/inspector/users/wms_packs_inventories.html" role="tab" >FBA中转库存</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="inv nav-link" href="/inspector/users/wms_packs_inventory_skus.html" role="tab" >FBA移除库存列表</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="inv nav-link" href="/inspector/users/wms_spec_summary.html" role="tab" >NSIN库存列表</a>
-                    </li>
-                  </ul>
-                  <div class="col-lg-12 stretch-card" style="padding-left: 0px; padding-right: 0px;">
-                    <div class="card">
-                      <div class="card-body">
-                        <form class="form-sample" id='search-form'>
-                        <div class="alert alert-danger" role="alert" id="notice" style="display: none;"></div>
-                        <input type="hidden" class="form-control" name="nord_code" id="nord_code" />
-                        <div class="row" style="font-size: 14px;">
-                          <div class="col-md-4">
-                            <div class="row">
-                              <label class="col-sm-4 col-form-label">SKU CODE：</label>
-                              <div class="col-sm-8">
-                                <input type="text" class="form-control" name="sku_code" id="sku_code" />
-                              </div>
-                            </div>
+                <div class="card-body">
+                  <h4 class="card-title">修改SKU价格</h4>
+                  <p class="card-description">
+                      SKU CODE：<span id="sku_code_show"></span>
+                  </p>
+                  <form class="forms-sample" id="edit_price">
+                    <div class="alert alert-danger" role="alert" id="notice" style="display: none;"></div>
+                    <div class="row">
+                      <input type="hidden" class="form-control" name="sku_code" id="sku_code"/>
+                      <input type="hidden" class="form-control" name="nord_code" id="nord_code"/>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">价格(EUR)：</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" name="price" id="price"/>
                           </div>
-                          <div class="col-md-4">
-                            <div class="row">
-                              <label class="col-sm-4 col-form-label">BARCODE：</label>
-                              <div class="col-sm-8">
-                                <input type="text" class="form-control" name="barcode" id="barcode" />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-4">
-                              <div class="form-group row">
-                                <button type="submit" class="btn btn-primary mr-2">搜索</button>
-                              </div>
-                            </div>
-                        </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-12 grid-margin stretch-card" style="padding-left: 0px; padding-right: 0px;">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col-md-2">
-                            <div class="form-group row">
-                              <a href="/inspector/users/index.html" class="btn btn-success mr-2">返回</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="table-responsive">
-                          <table class="table table-striped" id="table_details">
-                            <thead>
-                              <tr>
-                                <th>SKU编码</th>
-                                <th>商品条码</th>
-                                <th>商品名称</th>
-                                <th>可用数量</th>
-                                <th>冻结数量</th>
-                                <th>问题数量</th>
-                                <th>价格(EUR)</th>
-                              </tr>
-                            </thead>
-                            <tbody id='table-tr'>
-                            </tbody>
-                          </table>
                         </div>
                       </div>
                     </div>
-                  </div>
+                    <div class="row">
+                      <div class="col-md-2">
+                        <div class="form-group row">
+                          <button type="submit" class="btn btn-primary mr-2">修改</button>
+                          <a href="/inspector/users/index.html" class="btn btn-success mr-2">返回</a>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
 
@@ -215,7 +165,8 @@
   <script src="/static/js/data-table.js"></script>
   <script src="/static/js/jquery.dataTables.js"></script>
   <script src="/static/js/dataTables.bootstrap4.js"></script>
-  <script src="/static/js/main/inspector/wms_inventories.js"></script>
+  <script src="/static/js/file-upload.js"></script>
+  <script src="/static/js/main/inspector/edit_price.js"></script>
   <script src="/static/js/main/session.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
@@ -223,16 +174,3 @@
 </body>
 
 </html>
-
-<style>
-  .dataTables_wrapper .dataTable tbody tr td {
-    font-size: 13px;
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-  .table thead th {
-    font-size: 13px;
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-</style>
