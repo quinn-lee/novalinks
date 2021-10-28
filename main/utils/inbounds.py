@@ -8,7 +8,7 @@ def inbound_query(inbound_num):
     waybill = Waybill.objects.raw({'w_no': inbound_num}).first()
     if waybill is not None:
         res = requests.get(
-            "http://213.219.38.160:6001/api/v1.0/inbound_notifications/nova_show?inbound_num={}".format(
+            "http://178.79.168.53:6001/api/v1.0/inbound_notifications/nova_show?inbound_num={}".format(
                 inbound_num))
         if res.json().get('status') == "succ":
             wms_info = res.json().get('data')

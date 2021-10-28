@@ -171,7 +171,7 @@ def wms_inventories():
     sku_code = request.args.get('sku_code')
     barcode = request.args.get('barcode')
     res = requests.get(
-        "http://213.219.38.160:6001/api/v1.0/inventories/nova_inventories?abbr_code={}&sku_code={}&barcode={}".format(
+        "http://178.79.168.53:6001/api/v1.0/inventories/nova_inventories?abbr_code={}&sku_code={}&barcode={}".format(
             nord_code, sku_code, barcode))
     if res.json().get('status') == "succ":
         inventories = res.json().get('data')
@@ -189,7 +189,7 @@ def wms_packs_inventories():
     """admin/inspector查询库存数据"""
     nord_code = request.args.get('nord_code')
     res = requests.get(
-        "http://213.219.38.160:6001/api/v1.0/inbound_packs/nova_inventory?abbr_code={}".format(
+        "http://178.79.168.53:6001/api/v1.0/inbound_packs/nova_inventory?abbr_code={}".format(
             nord_code))
     if res.json().get('status') == "succ":
         return jsonify(errno='0', data=res.json().get('data'), totalRows=len(res.json().get('data')))
@@ -202,7 +202,7 @@ def wms_packs_inventory_skus():
     """admin/inspector查询库存数据"""
     nord_code = request.args.get('nord_code')
     res = requests.get(
-        "http://213.219.38.160:6001/api/v1.0/inbound_packs/nova_sku_inventory?abbr_code={}".format(
+        "http://178.79.168.53:6001/api/v1.0/inbound_packs/nova_sku_inventory?abbr_code={}".format(
             nord_code))
     if res.json().get('status') == "succ":
         return jsonify(errno='0', data=res.json().get('data'), totalRows=len(res.json().get('data')))
@@ -215,7 +215,7 @@ def wms_spec_summary():
     """admin/inspector查询库存数据"""
     nord_code = request.args.get('nord_code')
     res = requests.get(
-        "http://213.219.38.160:6001/api/v1.0/inbound_parcels/nova_spec_summary?abbr_code={}".format(
+        "http://178.79.168.53:6001/api/v1.0/inbound_parcels/nova_spec_summary?abbr_code={}".format(
             nord_code))
     if res.json().get('status') == "succ":
         return jsonify(errno='0', data=res.json().get('data'), totalRows=len(res.json().get('data')))
